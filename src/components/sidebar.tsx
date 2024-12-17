@@ -21,7 +21,7 @@ export function Sidebar() {
           </Link>
           <Link 
             href="/search" 
-            className="flex items-center gap-3 text-sm font-semibold text-zinc-200 hover:text-zinc-50"
+            className="flex items-center gap-3 text-sm font-semibold text-zinc-200 hover:text-zinc-50 transition-colors"
           >
             <Search className="h-6 w-6" />
             Search
