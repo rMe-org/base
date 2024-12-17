@@ -47,7 +47,10 @@ export function Sidebar() {
           <div className="rounded-lg bg-zinc-800/50 p-4">
             <strong className="text-sm font-semibold">Create your first playlist</strong>
             <p className="mt-2 text-xs text-zinc-400">It's easy, we'll help you</p>
-            <button className="mt-4 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:scale-105">
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="mt-4 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black hover:scale-105"
+            >
               Create playlist
             </button>
           </div>
