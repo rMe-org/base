@@ -9,8 +9,8 @@ import { createPlaylist } from "@/data/playlists";
 export function Sidebar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
-    <aside className="flex w-[350px] flex-col gap-2 min-h-0">
-      <div className="rounded-lg bg-zinc-900/90 p-6 backdrop-blur-xl">
+    <aside className="flex w-[350px] flex-col gap-3 min-h-0">
+      <div className="rounded-lg bg-zinc-900/80 p-6 backdrop-blur-xl shadow-xl ring-1 ring-white/5">
         <nav className="space-y-2">
           <Link 
             href="/" 
@@ -29,7 +29,7 @@ export function Sidebar() {
         </nav>
       </div>
       
-      <div className="flex flex-1 flex-col gap-4 rounded-lg bg-zinc-900 p-6">
+      <div className="flex flex-1 flex-col gap-4 rounded-lg bg-zinc-900/80 p-6 shadow-xl ring-1 ring-white/5 backdrop-blur-xl">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Library className="h-6 w-6" />

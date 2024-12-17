@@ -25,7 +25,7 @@ export function Player() {
     playPrevious
   } = usePlayer();
   return (
-    <footer className={`border-t border-zinc-800/40 bg-gradient-to-b from-black to-zinc-900 px-6 py-4 backdrop-blur-lg ${
+    <footer className={`border-t border-white/5 bg-gradient-to-b from-zinc-900/90 to-zinc-950/90 px-6 py-4 backdrop-blur-xl shadow-xl ${
       isFullScreen ? 'fixed inset-0 z-50 flex flex-col justify-center border-none' : ''
     } ${
       isMiniPlayer ? 'fixed bottom-4 right-4 z-50 w-80 rounded-lg border shadow-lg' : ''
