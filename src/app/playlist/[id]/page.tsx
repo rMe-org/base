@@ -1,4 +1,5 @@
-import { Clock, Play } from "lucide-react";
+import { ChevronLeft, Clock, Play } from "lucide-react";
+import Link from "next/link";
 import Image from "next/image";
 import { playlists } from "@/data/playlists";
 
@@ -11,7 +12,14 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-end gap-6 bg-gradient-to-b from-purple-800 to-zinc-900 px-6 py-10">
+      <div className="relative flex items-end gap-6 bg-gradient-to-b from-purple-800 to-zinc-900 px-6 py-10">
+        <Link 
+          href="/"
+          className="absolute top-4 left-4 flex items-center gap-2 font-semibold text-zinc-200 hover:text-zinc-50"
+        >
+          <ChevronLeft size={24} />
+          Back to Home
+        </Link>
         <Image
           src={playlist.imageUrl}
           width={192}
