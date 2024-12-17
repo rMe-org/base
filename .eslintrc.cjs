@@ -9,6 +9,9 @@ const config = {
   "plugins": [
     "@typescript-eslint"
   ],
+  "globals": {
+    "React": "readonly"
+  },
   "settings": {
     "react": {
       "version": "detect",
