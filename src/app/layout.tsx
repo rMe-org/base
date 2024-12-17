@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import { Sidebar } from "@/components/sidebar";
 import { Player } from "@/components/player";
+import { PlayerProvider } from "@/contexts/PlayerContext";
 
 export const metadata: Metadata = {
   title: "Spotify Clone",
@@ -17,7 +18,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body className="bg-black text-zinc-50">
-        <div className="flex h-screen flex-col">
+        <PlayerProvider>
+          <div className="flex h-screen flex-col">
           <div className="flex flex-1 gap-2 p-2">
             <Sidebar />
             <main className="flex-1 rounded-lg bg-zinc-900 p-2">
@@ -25,7 +27,8 @@ export default function RootLayout({
             </main>
           </div>
           <Player />
-        </div>
+          </div>
+        </PlayerProvider>
       </body>
     </html>
   );

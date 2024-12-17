@@ -1,9 +1,13 @@
-import { ChevronLeft, Clock, Play } from "lucide-react";
+"use client";
+
+import { ChevronLeft, Clock, Play, Pause } from "lucide-react";
+import { usePlayer } from "@/contexts/PlayerContext";
 import Link from "next/link";
 import Image from "next/image";
 import { playlists } from "@/data/playlists";
 
 export default function PlaylistPage({ params }: { params: { id: string } }) {
+  const { currentSong, isPlaying, play, toggle } = usePlayer();
   const playlist = playlists.find((p) => p.id === params.id);
 
   if (!playlist) {
@@ -41,8 +45,19 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
       </div>
 
       <div className="px-6 py-4">
-        <button className="flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-black shadow-lg transition-all hover:scale-105">
-          <Play className="ml-1" size={24} />
+        <button 
+          onClick={() => {
+            if (playlist.songs.length > 0) {
+              play(playlist.songs[0]);
+            }
+          }}
+          className="flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-black shadow-lg transition-all hover:scale-105"
+        >
+          {isPlaying && currentSong && playlist.songs.some(s => s.id === currentSong.id) ? (
+            <Pause size={24} />
+          ) : (
+            <Play className="ml-1" size={24} />
+          )}
         </button>
 
         <table className="mt-6 w-full text-left text-sm text-zinc-400">
@@ -60,7 +75,8 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
             {playlist.songs.map((song, index) => (
               <tr
                 key={song.id}
-                className="hover:bg-white/5"
+                className="group cursor-pointer hover:bg-white/5"
+                onClick={() => play(song)}
               >
                 <td className="px-4 py-3 text-zinc-400">{index + 1}</td>
                 <td className="flex items-center gap-3 px-4 py-3">
