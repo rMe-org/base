@@ -14,7 +14,7 @@ export const playlists: Playlist[] = [
         artist: "Taylor Swift",
         album: "Midnights",
         duration: 163,
-        cover: "https://i.scdn.co/image/ab67616d00004851e8b66087164d79a1f5df6eb6",
+        cover: "/album-covers/midnights.jpg",
         url: "#"
       },
       {
@@ -23,7 +23,7 @@ export const playlists: Playlist[] = [
         artist: "Taylor Swift",
         album: "Midnights",
         duration: 200,
-        cover: "https://i.scdn.co/image/ab67616d00004851e8b66087164d79a1f5df6eb6",
+        cover: "/album-covers/midnights.jpg",
         url: "#"
       }
     ],
@@ -42,7 +42,7 @@ export const playlists: Playlist[] = [
         artist: "Taylor Swift",
         album: "Lover",
         duration: 178,
-        cover: "https://i.scdn.co/image/ab67616d00004851e5d6e2242f8a6ec72cf82094",
+        cover: "/album-covers/lover.jpg",
         url: "#"
       },
       {
@@ -51,7 +51,7 @@ export const playlists: Playlist[] = [
         artist: "Taylor Swift",
         album: "1989",
         duration: 231,
-        cover: "https://i.scdn.co/image/ab67616d000048514519239e9f428fc96c41d934",
+        cover: "/album-covers/1989.jpg",
         url: "#"
       },
       {
@@ -60,7 +60,7 @@ export const playlists: Playlist[] = [
         artist: "Taylor Swift",
         album: "1989",
         duration: 219,
-        cover: "https://i.scdn.co/image/ab67616d000048514519239e9f428fc96c41d934",
+        cover: "/album-covers/1989.jpg",
         url: "#"
       }
     ],
