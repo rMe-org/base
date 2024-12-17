@@ -1,8 +1,7 @@
 import { Playlist, Song } from "@/types/music";
 
 // Initialize playlists from localStorage or use default data
-let playlistsData: Playlist[] = typeof window !== 'undefined' 
-  ? JSON.parse(localStorage.getItem('playlists') || 'null') || [
+const defaultPlaylists: Playlist[] = [
   {
     id: "1",
     name: "Liked Songs",
@@ -69,6 +68,10 @@ let playlistsData: Playlist[] = typeof window !== 'undefined'
     createdAt: new Date()
   }
 ];
+
+let playlistsData: Playlist[] = typeof window !== 'undefined'
+  ? JSON.parse(localStorage.getItem('playlists') || 'null') || defaultPlaylists
+  : defaultPlaylists;
 
 // Update localStorage whenever playlists change
 const updateLocalStorage = () => {
