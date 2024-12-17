@@ -40,7 +40,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
   // Simulate progress updates when playing
   useEffect(() => {
-    let interval: Timeout;
+    let interval: NodeJS.Timeout;
     if (isPlaying && currentSong) {
       interval = setInterval(() => {
         setProgress((prev) => {
