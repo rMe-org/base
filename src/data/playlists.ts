@@ -1,6 +1,6 @@
 import { Playlist, Song } from "@/types/music";
 
-export const playlists: Playlist[] = [
+let playlistsData: Playlist[] = [
   {
     id: "1",
     name: "Liked Songs",
@@ -67,3 +67,20 @@ export const playlists: Playlist[] = [
     createdAt: new Date()
   }
 ];
+
+export const playlists = playlistsData;
+
+export function createPlaylist(name: string, description?: string): Playlist {
+  const newPlaylist: Playlist = {
+    id: String(playlistsData.length + 1),
+    name,
+    description,
+    imageUrl: "https://misc.scdn.co/liked-songs/liked-songs-640.png", // Default image
+    owner: "Your Library",
+    songs: [],
+    createdAt: new Date()
+  };
+  
+  playlistsData = [...playlistsData, newPlaylist];
+  return newPlaylist;
+}

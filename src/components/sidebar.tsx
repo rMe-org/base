@@ -1,7 +1,13 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { Home, Search, Library, Plus, Heart } from "lucide-react";
+import { CreatePlaylistModal } from "./create-playlist-modal";
+import { createPlaylist } from "@/data/playlists";
 
 export function Sidebar() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <aside className="flex w-[350px] flex-col gap-2 min-h-0">
       <div className="rounded-lg bg-zinc-900/90 p-6 backdrop-blur-xl">
@@ -29,7 +35,10 @@ export function Sidebar() {
             <Library className="h-6 w-6" />
             <span className="font-semibold">Your Library</span>
           </div>
-          <button className="text-zinc-400 hover:text-zinc-100">
+          <button 
+            onClick={() => setIsModalOpen(true)}
+            className="text-zinc-400 hover:text-zinc-100"
+          >
             <Plus className="h-5 w-5" />
           </button>
         </div>
@@ -52,6 +61,13 @@ export function Sidebar() {
           </div>
         </div>
       </div>
+      <CreatePlaylistModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={(name, description) => {
+          createPlaylist(name, description);
+        }}
+      />
     </aside>
   );
 }
