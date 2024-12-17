@@ -3,6 +3,7 @@
 import { Song } from "@/types/music";
 import { createContext, useContext, useState, useEffect } from "react";
 import { playlists } from "@/data/playlists";
+import type { Timeout } from "node";
 
 interface PlayerContextType {
   currentSong: Song | null;
@@ -34,7 +35,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
   // Simulate progress updates when playing
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: Timeout;
     if (isPlaying && currentSong) {
       interval = setInterval(() => {
         setProgress((prev) => {
