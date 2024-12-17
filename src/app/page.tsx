@@ -1,16 +1,9 @@
 import { Play } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HomePage() {
-  const playlists = [
-    {
-      id: 1,
-      name: "Liked Songs",
-      imageUrl: "https://misc.scdn.co/liked-songs/liked-songs-640.png",
-      owner: "Your Library"
-    },
-    // Add more playlists here
-  ];
+  import { playlists } from "@/data/playlists";
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -19,7 +12,8 @@ export default function HomePage() {
         
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {playlists.map((playlist) => (
-            <div 
+            <Link
+              href={`/playlist/${playlist.id}`}
               key={playlist.id}
               className="group relative flex cursor-pointer items-center gap-4 overflow-hidden rounded bg-white/10 transition-all hover:bg-white/20"
             >
@@ -34,7 +28,7 @@ export default function HomePage() {
               <button className="absolute right-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-500 text-black opacity-0 shadow-lg transition-all hover:scale-105 group-hover:opacity-100">
                 <Play className="ml-1" />
               </button>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -43,7 +37,8 @@ export default function HomePage() {
         <h2 className="text-2xl font-bold">Made for You</h2>
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {playlists.map((playlist) => (
-            <div 
+            <Link
+              href={`/playlist/${playlist.id}`}
               key={playlist.id}
               className="group relative rounded-md bg-zinc-800 p-4 hover:bg-zinc-800/50"
             >
