@@ -3,7 +3,7 @@
 import { Song } from "@/types/music";
 import { createContext, useContext, useState, useEffect } from "react";
 import { playlists } from "@/data/playlists";
-import type { Timeout } from "node";
+import type { NodeJS } from "@types/node";
 
 interface PlayerContextType {
   currentSong: Song | null;
@@ -35,7 +35,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
   // Simulate progress updates when playing
   useEffect(() => {
-    let interval: Timeout;
+    let interval: NodeJS.Timeout;
     if (isPlaying && currentSong) {
       interval = setInterval(() => {
         setProgress((prev) => {
@@ -98,7 +98,10 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       nextIndex = (currentIndex + 1) % currentPlaylist.songs.length;
     }
     
-    play(currentPlaylist.songs[nextIndex]);
+    const nextSong = currentPlaylist.songs[nextIndex];
+    if (nextSong) {
+      play(nextSong);
+    }
   };
 
   const playPrevious = () => {
@@ -119,11 +122,32 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       prevIndex = currentIndex === 0 ? currentPlaylist.songs.length - 1 : currentIndex - 1;
     }
     
-    play(currentPlaylist.songs[prevIndex]);
+    const prevSong = currentPlaylist.songs[prevIndex];
+    if (prevSong) {
+      play(prevSong);
+    }
   };
 
   return (
-    <PlayerContext.Provider value={{ currentSong, isPlaying, play, pause, toggle }}>
+    <PlayerContext.Provider 
+      value={{ 
+        currentSong, 
+        isPlaying, 
+        progress,
+        volume,
+        isShuffling,
+        isRepeating,
+        play,
+        pause,
+        toggle,
+        seek,
+        setVolume,
+        toggleShuffle,
+        toggleRepeat,
+        playNext,
+        playPrevious
+      }}
+    >
       {children}
     </PlayerContext.Provider>
   );

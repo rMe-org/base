@@ -48,7 +48,10 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
         <button 
           onClick={() => {
             if (playlist.songs.length > 0) {
-              play(playlist.songs[0]);
+              const firstSong = playlist.songs[0];
+              if (firstSong) {
+                play(firstSong);
+              }
             }
           }}
           className="flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-black shadow-lg transition-all hover:scale-105"
