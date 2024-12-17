@@ -3,7 +3,7 @@
 import { Song } from "@/types/music";
 import { createContext, useContext, useState, useEffect } from "react";
 import { playlists } from "@/data/playlists";
-import type { NodeJS } from "@types/node";
+import { type Timeout } from "node:timers";
 
 interface PlayerContextType {
   currentSong: Song | null;
@@ -13,6 +13,7 @@ interface PlayerContextType {
   isShuffling: boolean;
   isRepeating: boolean;
   isFullScreen: boolean;
+  isMiniPlayer: boolean;
   play: (song: Song) => void;
   pause: () => void;
   toggle: () => void;
@@ -21,6 +22,7 @@ interface PlayerContextType {
   toggleShuffle: () => void;
   toggleRepeat: () => void;
   toggleFullScreen: () => void;
+  toggleMiniPlayer: () => void;
   playNext: () => void;
   playPrevious: () => void;
 }
@@ -35,10 +37,11 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const [isShuffling, setIsShuffling] = useState(false);
   const [isRepeating, setIsRepeating] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isMiniPlayer, setIsMiniPlayer] = useState(false);
 
   // Simulate progress updates when playing
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: Timeout;
     if (isPlaying && currentSong) {
       interval = setInterval(() => {
         setProgress((prev) => {
@@ -85,6 +88,12 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
+    setIsMiniPlayer(false);
+  };
+
+  const toggleMiniPlayer = () => {
+    setIsMiniPlayer(!isMiniPlayer);
+    setIsFullScreen(false);
   };
 
   const playNext = () => {
@@ -153,6 +162,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         toggleShuffle,
         toggleRepeat,
         toggleFullScreen,
+        isMiniPlayer,
+        toggleMiniPlayer,
         playNext,
         playPrevious
       }}

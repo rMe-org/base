@@ -1,6 +1,6 @@
 "use client";
 
-import { Play, Pause, Shuffle, SkipBack, SkipForward, Repeat, Mic2, ListMusic, Laptop2, Volume, Maximize2 } from "lucide-react";
+import { Play, Pause, Shuffle, SkipBack, SkipForward, Repeat, Mic2, ListMusic, Laptop2, Volume, Maximize2, Minimize2 } from "lucide-react";
 import { usePlayer } from "@/contexts/PlayerContext";
 import Image from "next/image";
 
@@ -13,18 +13,22 @@ export function Player() {
     isShuffling,
     isRepeating,
     isFullScreen,
+    isMiniPlayer,
     toggle,
     seek,
     setVolume,
     toggleShuffle,
     toggleRepeat,
     toggleFullScreen,
+    toggleMiniPlayer,
     playNext,
     playPrevious
   } = usePlayer();
   return (
     <footer className={`border-t border-zinc-800 bg-zinc-950 px-6 py-4 ${
       isFullScreen ? 'fixed inset-0 z-50 flex flex-col justify-center border-none' : ''
+    } ${
+      isMiniPlayer ? 'fixed bottom-4 right-4 z-50 w-80 rounded-lg border shadow-lg' : ''
     }`}>
       <div className={`flex items-center justify-between ${
         isFullScreen ? 'max-w-screen-xl mx-auto w-full' : ''
@@ -144,12 +148,20 @@ export function Player() {
               />
             </div>
           </div>
-          <button 
-            onClick={toggleFullScreen}
-            className={`text-zinc-200 transition-colors ${isFullScreen ? 'text-green-500' : 'hover:text-zinc-100'}`}
-          >
-            <Maximize2 size={20} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={toggleMiniPlayer}
+              className={`text-zinc-200 transition-colors ${isMiniPlayer ? 'text-green-500' : 'hover:text-zinc-100'}`}
+            >
+              <Minimize2 size={20} />
+            </button>
+            <button 
+              onClick={toggleFullScreen}
+              className={`text-zinc-200 transition-colors ${isFullScreen ? 'text-green-500' : 'hover:text-zinc-100'}`}
+            >
+              <Maximize2 size={20} />
+            </button>
+          </div>
         </div>
       </div>
     </footer>
