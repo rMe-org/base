@@ -8,7 +8,7 @@ export default function HomePage() {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <section className="bg-gradient-to-b from-purple-800 to-zinc-900 px-6 py-10">
+      <section className="bg-gradient-to-b from-purple-800/80 to-black px-6 pt-20 pb-8 backdrop-blur-sm">
         <h1 className="text-3xl font-bold">Good afternoon</h1>
         
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

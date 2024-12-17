@@ -16,7 +16,7 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="flex flex-col">
-      <div className="relative flex items-end gap-6 bg-gradient-to-b from-purple-800 to-zinc-900 px-6 py-10">
+      <div className="relative flex items-end gap-6 bg-gradient-to-b from-purple-800/80 to-black px-6 pt-20 pb-8 backdrop-blur-sm">
         <Link 
           href="/"
           className="absolute top-4 left-4 flex items-center gap-2 font-semibold text-zinc-200 hover:text-zinc-50"

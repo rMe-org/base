@@ -3,7 +3,6 @@
 import { Song } from "@/types/music";
 import { createContext, useContext, useState, useEffect } from "react";
 import { playlists } from "@/data/playlists";
-import { type Timeout } from "node:timers";
 
 interface PlayerContextType {
   currentSong: Song | null;

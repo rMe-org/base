@@ -19,10 +19,10 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body className="bg-black text-zinc-50">
         <PlayerProvider>
-          <div className="flex h-screen flex-col">
-          <div className="flex flex-1 gap-2 p-2">
+          <div className="flex h-screen flex-col bg-black">
+          <div className="flex flex-1 gap-2 p-2 overflow-hidden">
             <Sidebar />
-            <main className="flex-1 rounded-lg bg-zinc-900 p-2">
+            <main className="flex-1 rounded-lg bg-gradient-to-b from-zinc-900 to-black p-2 overflow-y-auto">
               {children}
             </main>
           </div>

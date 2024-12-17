@@ -3,8 +3,8 @@ import { Home, Search, Library, Plus, Heart } from "lucide-react";
 
 export function Sidebar() {
   return (
-    <aside className="flex w-[350px] flex-col gap-2">
-      <div className="rounded-lg bg-zinc-900 p-6">
+    <aside className="flex w-[350px] flex-col gap-2 min-h-0">
+      <div className="rounded-lg bg-zinc-900/90 p-6 backdrop-blur-xl">
         <nav className="space-y-2">
           <Link 
             href="/" 
