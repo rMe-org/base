@@ -2,8 +2,9 @@ import { Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { playlists } from "@/data/playlists";
+
 export default function HomePage() {
-  import { playlists } from "@/data/playlists";
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -57,7 +58,7 @@ export default function HomePage() {
 
               <strong className="mt-4 block text-sm font-semibold">{playlist.name}</strong>
               <span className="mt-1 block text-sm text-zinc-400">{playlist.owner}</span>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
