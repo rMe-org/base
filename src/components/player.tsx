@@ -5,7 +5,21 @@ import { usePlayer } from "@/contexts/PlayerContext";
 import Image from "next/image";
 
 export function Player() {
-  const { currentSong, isPlaying, toggle } = usePlayer();
+  const { 
+    currentSong, 
+    isPlaying, 
+    progress, 
+    volume,
+    isShuffling,
+    isRepeating,
+    toggle,
+    seek,
+    setVolume,
+    toggleShuffle,
+    toggleRepeat,
+    playNext,
+    playPrevious
+  } = usePlayer();
   return (
     <footer className="border-t border-zinc-800 bg-zinc-950 px-6 py-4">
       <div className="flex items-center justify-between">
@@ -37,8 +51,20 @@ export function Player() {
         
         <div className="flex flex-col items-center gap-2">
           <div className="flex items-center gap-6">
-            <Shuffle size={20} className="text-zinc-200" />
-            <SkipBack size={20} className="text-zinc-200" />
+            <button
+              onClick={toggleShuffle}
+              className={`text-zinc-200 transition-colors ${isShuffling ? 'text-green-500' : 'hover:text-zinc-100'}`}
+            >
+              <Shuffle size={20} />
+            </button>
+
+            <button
+              onClick={playPrevious}
+              className="text-zinc-200 hover:text-zinc-100"
+              disabled={!currentSong}
+            >
+              <SkipBack size={20} />
+            </button>
             
             <button 
               onClick={toggle}
@@ -52,15 +78,43 @@ export function Player() {
               )}
             </button>
             
-            <SkipForward size={20} className="text-zinc-200" />
-            <Repeat size={20} className="text-zinc-200" />
+            <button
+              onClick={playNext}
+              className="text-zinc-200 hover:text-zinc-100"
+              disabled={!currentSong}
+            >
+              <SkipForward size={20} />
+            </button>
+
+            <button
+              onClick={toggleRepeat}
+              className={`text-zinc-200 transition-colors ${isRepeating ? 'text-green-500' : 'hover:text-zinc-100'}`}
+            >
+              <Repeat size={20} />
+            </button>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-zinc-400">0:31</span>
-            <div className="h-1 w-96 rounded-full bg-zinc-600">
-              <div className="h-1 w-40 rounded-full bg-zinc-200" />
+            <span className="text-xs text-zinc-400">
+              {Math.floor(progress / 60)}:{String(progress % 60).padStart(2, '0')}
+            </span>
+            <div 
+              className="group relative h-1 w-96 rounded-full bg-zinc-600"
+              onClick={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                if (currentSong) {
+                  seek(Math.floor(currentSong.duration * percent));
+                }
+              }}
+            >
+              <div 
+                className="h-1 rounded-full bg-zinc-200 group-hover:bg-green-500"
+                style={{ width: currentSong ? `${(progress / currentSong.duration) * 100}%` : '0%' }}
+              />
             </div>
-            <span className="text-xs text-zinc-400">2:43</span>
+            <span className="text-xs text-zinc-400">
+              {currentSong ? `${Math.floor(currentSong.duration / 60)}:${String(currentSong.duration % 60).padStart(2, '0')}` : '0:00'}
+            </span>
           </div>
         </div>
         
@@ -70,8 +124,18 @@ export function Player() {
           <Laptop2 size={20} />
           <div className="flex items-center gap-2">
             <Volume size={20} />
-            <div className="h-1 w-24 rounded-full bg-zinc-600">
-              <div className="h-1 w-10 rounded-full bg-zinc-200" />
+            <div 
+              className="group relative h-1 w-24 rounded-full bg-zinc-600"
+              onClick={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const percent = (e.clientX - rect.left) / rect.width;
+                setVolume(Math.max(0, Math.min(1, percent)));
+              }}
+            >
+              <div 
+                className="h-1 rounded-full bg-zinc-200 group-hover:bg-green-500"
+                style={{ width: `${volume * 100}%` }}
+              />
             </div>
           </div>
           <Maximize2 size={20} />
