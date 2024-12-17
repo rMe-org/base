@@ -95,6 +95,8 @@ export function createPlaylist(name: string, description?: string): Playlist {
   
   playlistsData = [...playlistsData, newPlaylist];
   updateLocalStorage();
+  // Dispatch storage event to notify other components
+  window.dispatchEvent(new Event('storage'));
   return newPlaylist;
 }
 

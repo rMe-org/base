@@ -1,10 +1,27 @@
+"use client";
+
 import { Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
+import { useEffect, useState } from "react";
 import { playlists } from "@/data/playlists";
+import type { Playlist } from "@/types/music";
 
 export default function HomePage() {
+  const [playlistsData, setPlaylistsData] = useState<Playlist[]>(playlists);
+
+  useEffect(() => {
+    // Update playlists when localStorage changes
+    const handleStorageChange = () => {
+      const storedPlaylists = localStorage.getItem('playlists');
+      if (storedPlaylists) {
+        setPlaylistsData(JSON.parse(storedPlaylists));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -12,7 +29,7 @@ export default function HomePage() {
         <h1 className="text-3xl font-bold">Good afternoon</h1>
         
         <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {playlists.map((playlist) => (
+          {playlistsData.map((playlist) => (
             <Link
               href={`/playlist/${playlist.id}`}
               key={playlist.id}
@@ -37,7 +54,7 @@ export default function HomePage() {
       <section className="px-6 py-8">
         <h2 className="text-2xl font-bold">Made for You</h2>
         <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-          {playlists.map((playlist) => (
+          {playlistsData.map((playlist) => (
             <Link
               href={`/playlist/${playlist.id}`}
               key={playlist.id}
