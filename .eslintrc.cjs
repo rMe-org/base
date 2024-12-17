@@ -51,6 +51,7 @@ const config = {
     "@typescript-eslint/no-explicit-any": "off",
     "import/no-named-as-default-member": "error",
     "react/no-unknown-property": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
   },
   "env": {
     "browser": true,
