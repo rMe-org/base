@@ -12,17 +12,23 @@ export function Player() {
     volume,
     isShuffling,
     isRepeating,
+    isFullScreen,
     toggle,
     seek,
     setVolume,
     toggleShuffle,
     toggleRepeat,
+    toggleFullScreen,
     playNext,
     playPrevious
   } = usePlayer();
   return (
-    <footer className="border-t border-zinc-800 bg-zinc-950 px-6 py-4">
-      <div className="flex items-center justify-between">
+    <footer className={`border-t border-zinc-800 bg-zinc-950 px-6 py-4 ${
+      isFullScreen ? 'fixed inset-0 z-50 flex flex-col justify-center border-none' : ''
+    }`}>
+      <div className={`flex items-center justify-between ${
+        isFullScreen ? 'max-w-screen-xl mx-auto w-full' : ''
+      }`}>
         <div className="flex items-center gap-3">
           {currentSong ? (
             <>
@@ -138,7 +144,12 @@ export function Player() {
               />
             </div>
           </div>
-          <Maximize2 size={20} />
+          <button 
+            onClick={toggleFullScreen}
+            className={`text-zinc-200 transition-colors ${isFullScreen ? 'text-green-500' : 'hover:text-zinc-100'}`}
+          >
+            <Maximize2 size={20} />
+          </button>
         </div>
       </div>
     </footer>

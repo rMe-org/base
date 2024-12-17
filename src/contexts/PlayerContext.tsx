@@ -12,6 +12,7 @@ interface PlayerContextType {
   volume: number;
   isShuffling: boolean;
   isRepeating: boolean;
+  isFullScreen: boolean;
   play: (song: Song) => void;
   pause: () => void;
   toggle: () => void;
@@ -19,6 +20,7 @@ interface PlayerContextType {
   setVolume: (volume: number) => void;
   toggleShuffle: () => void;
   toggleRepeat: () => void;
+  toggleFullScreen: () => void;
   playNext: () => void;
   playPrevious: () => void;
 }
@@ -32,6 +34,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
   const [volume, setVolume] = useState(1);
   const [isShuffling, setIsShuffling] = useState(false);
   const [isRepeating, setIsRepeating] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   // Simulate progress updates when playing
   useEffect(() => {
@@ -78,6 +81,10 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
   const toggleRepeat = () => {
     setIsRepeating(!isRepeating);
+  };
+
+  const toggleFullScreen = () => {
+    setIsFullScreen(!isFullScreen);
   };
 
   const playNext = () => {
@@ -137,6 +144,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         volume,
         isShuffling,
         isRepeating,
+        isFullScreen,
         play,
         pause,
         toggle,
@@ -144,6 +152,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         setVolume,
         toggleShuffle,
         toggleRepeat,
+        toggleFullScreen,
         playNext,
         playPrevious
       }}
