@@ -5,6 +5,7 @@ import { usePlayer } from "@/contexts/PlayerContext";
 import Image from "next/image";
 
 export function Player() {
+  const { currentSong, isPlaying, toggle } = usePlayer();
   return (
     <footer className="border-t border-zinc-800 bg-zinc-950 px-6 py-4">
       <div className="flex items-center justify-between">
