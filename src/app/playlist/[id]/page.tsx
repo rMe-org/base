@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { ChevronLeft, Clock, Play, Pause, Plus } from "lucide-react";
 import { usePlayer } from "@/contexts/PlayerContext";
 import Link from "next/link";
