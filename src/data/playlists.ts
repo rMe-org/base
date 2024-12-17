@@ -1,6 +1,8 @@
 import { Playlist, Song } from "@/types/music";
 
-let playlistsData: Playlist[] = [
+// Initialize playlists from localStorage or use default data
+let playlistsData: Playlist[] = typeof window !== 'undefined' 
+  ? JSON.parse(localStorage.getItem('playlists') || 'null') || [
   {
     id: "1",
     name: "Liked Songs",
@@ -68,6 +70,13 @@ let playlistsData: Playlist[] = [
   }
 ];
 
+// Update localStorage whenever playlists change
+const updateLocalStorage = () => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('playlists', JSON.stringify(playlistsData));
+  }
+};
+
 export const playlists = playlistsData;
 
 export function createPlaylist(name: string, description?: string): Playlist {
@@ -82,6 +91,7 @@ export function createPlaylist(name: string, description?: string): Playlist {
   };
   
   playlistsData = [...playlistsData, newPlaylist];
+  updateLocalStorage();
   return newPlaylist;
 }
 
@@ -89,5 +99,6 @@ export function addSongToPlaylist(playlistId: string, song: Song): void {
   const playlist = playlistsData.find(p => p.id === playlistId);
   if (playlist) {
     playlist.songs = [...playlist.songs, song];
+    updateLocalStorage();
   }
 }
