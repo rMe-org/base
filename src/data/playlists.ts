@@ -84,3 +84,10 @@ export function createPlaylist(name: string, description?: string): Playlist {
   playlistsData = [...playlistsData, newPlaylist];
   return newPlaylist;
 }
+
+export function addSongToPlaylist(playlistId: string, song: Song): void {
+  const playlist = playlistsData.find(p => p.id === playlistId);
+  if (playlist) {
+    playlist.songs = [...playlist.songs, song];
+  }
+}

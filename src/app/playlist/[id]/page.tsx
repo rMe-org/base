@@ -1,13 +1,15 @@
 "use client";
 
-import { ChevronLeft, Clock, Play, Pause } from "lucide-react";
+import { ChevronLeft, Clock, Play, Pause, Plus } from "lucide-react";
 import { usePlayer } from "@/contexts/PlayerContext";
 import Link from "next/link";
 import Image from "next/image";
-import { playlists } from "@/data/playlists";
+import { playlists, addSongToPlaylist } from "@/data/playlists";
+import { AddSongModal } from "@/components/add-song-modal";
 
 export default function PlaylistPage({ params }: { params: { id: string } }) {
   const { currentSong, isPlaying, play, toggle } = usePlayer();
+  const [isAddSongModalOpen, setIsAddSongModalOpen] = useState(false);
   const playlist = playlists.find((p) => p.id === params.id);
 
   if (!playlist) {
@@ -45,25 +47,34 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
       </div>
 
       <div className="px-6 py-4">
-        <button 
-          onClick={() => {
-            if (playlist.songs.length > 0) {
-              const firstSong = playlist.songs[0];
-              if (firstSong) {
-                play(firstSong);
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => {
+              if (playlist.songs.length > 0) {
+                const firstSong = playlist.songs[0];
+                if (firstSong) {
+                  play(firstSong);
+                }
               }
-            }
-          }}
-          className="flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-black shadow-lg transition-all hover:scale-105"
-        >
+            }}
+            className="flex h-14 w-14 items-center justify-center rounded-full bg-green-500 text-black shadow-lg transition-all hover:scale-105"
+          >
           {isPlaying && currentSong && playlist.songs.some(s => s.id === currentSong.id) ? (
             <Pause size={24} />
           ) : (
             <Play className="ml-1" size={24} />
           )}
-        </button>
+          </button>
+          <button
+            onClick={() => setIsAddSongModalOpen(true)}
+            className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/20"
+          >
+            <Plus size={20} />
+            Add Song
+          </button>
+        </div>
 
-        <table className="mt-6 w-full text-left text-sm text-zinc-400">
+        <table className="mt-6 w-full text-left text-sm text-zinc-400 border-separate border-spacing-0">
           <thead>
             <tr className="border-b border-zinc-800">
               <th className="px-4 py-3">#</th>
@@ -78,7 +89,7 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
             {playlist.songs.map((song, index) => (
               <tr
                 key={song.id}
-                className="group cursor-pointer hover:bg-white/5"
+                className="group cursor-pointer hover:bg-white/5 transition-colors"
                 onClick={() => play(song)}
               >
                 <td className="px-4 py-3 text-zinc-400">{index + 1}</td>
@@ -105,6 +116,14 @@ export default function PlaylistPage({ params }: { params: { id: string } }) {
           </tbody>
         </table>
       </div>
+      
+      <AddSongModal
+        isOpen={isAddSongModalOpen}
+        onClose={() => setIsAddSongModalOpen(false)}
+        onSubmit={(song) => {
+          addSongToPlaylist(params.id, song);
+        }}
+      />
     </div>
   );
 }
