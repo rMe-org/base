@@ -52,17 +52,17 @@ export function NeuralNetworkPlayground() {
 
     for (let i = 0; i < newNeurons.length; i++) {
       const neuron = newNeurons[i];
-      const nextLayerNeurons = newNeurons.filter(n => n.layer === neuron.layer + 1);
+      if (!neuron) continue;
+      const nextLayerNeurons = newNeurons.filter(n => n && n.layer === neuron.layer + 1);
       
-      if (nextLayerNeurons.length > 0) {
-        nextLayerNeurons.forEach(nextNeuron => {
-          newConnections.push({
-            from: neuron,
-            to: nextNeuron,
-            weight: Math.random() * 2 - 1,
-          });
+      nextLayerNeurons.forEach(nextNeuron => {
+        if (!nextNeuron) return;
+        newConnections.push({
+          from: neuron,
+          to: nextNeuron,
+          weight: Math.random() * 2 - 1,
         });
-      }
+      });
     }
 
     setNeurons(newNeurons);
