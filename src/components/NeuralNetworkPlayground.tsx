@@ -124,9 +124,7 @@ export function NeuralNetworkPlayground() {
             c => c.from === prevNeuron && c.to === neuron
           );
           if (connection) {
-            const prevActivation = typeof prevNeuron.activation === 'number' ? prevNeuron.activation : 0;
-            const weight = typeof connection.weight === 'number' ? connection.weight : 0;
-            sum += prevActivation * weight;
+            sum += (prevNeuron.activation ?? 0) * (connection.weight ?? 0);
           }
         });
         const rawActivation = 1 / (1 + Math.exp(-sum)); // Sigmoid activation
