@@ -145,6 +145,47 @@ export function MLPlayground() {
         <div className="flex items-center justify-between">
           <h3 className="text-2xl font-semibold">ML Model Playground</h3>
           <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <select
+                value={config.activation}
+                onChange={(e) => setConfig(prev => ({
+                  ...prev,
+                  activation: e.target.value as ModelConfig["activation"]
+                }))}
+                className="px-3 py-2 rounded-lg bg-background border"
+              >
+                <option value="relu">ReLU</option>
+                <option value="sigmoid">Sigmoid</option>
+                <option value="tanh">Tanh</option>
+              </select>
+              <input
+                type="number"
+                value={config.learningRate}
+                onChange={(e) => setConfig(prev => ({
+                  ...prev,
+                  learningRate: parseFloat(e.target.value)
+                }))}
+                step={0.001}
+                min={0.001}
+                max={1}
+                className="w-24 px-3 py-2 rounded-lg bg-background border"
+              />
+            </div>
+            <button
+              onClick={() => !isTraining && startTraining()}
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+            >
+              {isTraining ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              {isTraining ? "Training..." : "Start Training"}
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="p-2 rounded-lg hover:bg-secondary/80 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
           <div className="flex items-center gap-2">
             <select
               value={config.activation}
