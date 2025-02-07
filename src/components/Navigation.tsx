@@ -15,7 +15,13 @@ export function Navigation() {
         <Link href="/" className="text-xl font-bold">
           Simon Bergeron
         </Link>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-8">
+          <Link href="#about" className="hover:text-primary/80 transition-colors">
+            About
+          </Link>
+          <Link href="#experience" className="hover:text-primary/80 transition-colors">
+            Experience
+          </Link>
           <Link href="https://github.com" className="hover:text-primary/80 transition-colors">
             <Github className="w-5 h-5" />
           </Link>
