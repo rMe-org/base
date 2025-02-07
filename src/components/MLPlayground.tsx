@@ -118,8 +118,8 @@ export function MLPlayground() {
       callbacks: {
         onEpochEnd: async (epoch: number, logs?: tf.Logs) => {
           setEpoch(epoch);
-          if (logs?.loss) setLoss(logs.loss);
-          if (logs?.acc) setAccuracy(logs.acc);
+          if (logs?.loss) setLoss(logs.loss || 0);
+          if (logs?.acc) setAccuracy(logs.acc || 0);
           if (epoch % 5 === 0) await generatePredictions();
         }
       }

@@ -45,8 +45,9 @@ export function NeuralNetworkVisualizer() {
           // Draw connections to next layer
           if (layerIndex < layers.length - 1) {
             const nextX = spacing * (layerIndex + 2);
-            const nextNodes = layers[layerIndex + 1];
-            if (!nextNodes) return;
+            const nextLayerIndex = layerIndex + 1;
+            if (nextLayerIndex >= layers.length) return;
+            const nextNodes = layers[nextLayerIndex];
             const nextHeightSpacing = canvasRef.current!.height / (nextNodes + 1);
 
             for (let j = 0; j < nextNodes; j++) {
