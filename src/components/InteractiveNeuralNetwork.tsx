@@ -54,13 +54,15 @@ export function InteractiveNeuralNetwork() {
     modelRef.current = model;
 
     const surface = tfvis.visor().surface({ name: "Training Data", tab: "Data" });
+    const values = data.points.map((p, i) => ({
+      x: p[0],
+      y: p[1],
+      label: data.labels[i]
+    }));
+    
     tfvis.render.scatterplot(
       surface,
-      {
-        values: [
-          data.points.map((p, i) => ({ x: p[0], y: p[1], label: data.labels[i] }))
-        ]
-      },
+      { values: [values] },
       {
         xLabel: "X",
         yLabel: "Y",
