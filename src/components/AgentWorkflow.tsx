@@ -134,7 +134,7 @@ export function AgentWorkflow() {
       animate={{ opacity: 1, y: 0 }}
       className="bg-secondary/30 p-6 rounded-xl"
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8">
         <h3 className="text-2xl font-semibold">Multi-Agent Collaboration</h3>
         <button
           onClick={() => !isSimulating && startSimulation()}
@@ -144,7 +144,7 @@ export function AgentWorkflow() {
           {isSimulating ? 'Simulating...' : 'Start Simulation'}
         </button>
       </div>
-      <div className="w-full h-[400px] bg-background rounded-lg">
+      <div className="w-full h-[400px] bg-background/95 rounded-lg border border-border">
         <ReactFlow
           nodes={nodes}
           edges={edges}

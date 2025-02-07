@@ -141,9 +141,10 @@ export function MLPlayground() {
       animate={{ opacity: 1, y: 0 }}
       className="bg-secondary/30 p-6 rounded-xl"
     >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-semibold">ML Model Playground</h3>
-        <div className="flex items-center gap-4">
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h3 className="text-2xl font-semibold">ML Model Playground</h3>
+          <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <select
               value={config.activation}

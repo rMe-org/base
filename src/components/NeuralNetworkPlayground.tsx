@@ -80,8 +80,8 @@ export function NeuralNetworkPlayground() {
       ctx.beginPath();
       ctx.moveTo(conn.from.x, conn.from.y);
       ctx.lineTo(conn.to.x, conn.to.y);
-      ctx.strokeStyle = `rgba(100, 116, 139, ${Math.abs(conn.weight)})`;
-      ctx.lineWidth = Math.abs(conn.weight) * 3;
+      ctx.strokeStyle = `rgba(59, 130, 246, ${Math.abs(conn.weight)})`;
+      ctx.lineWidth = Math.abs(conn.weight) * 4;
       ctx.stroke();
     });
 
@@ -183,7 +183,7 @@ export function NeuralNetworkPlayground() {
         <canvas
           ref={canvasRef}
           onClick={handleCanvasClick}
-          className="bg-background rounded-lg cursor-pointer"
+          className="bg-background/95 rounded-lg cursor-pointer border border-border"
           width={800}
           height={400}
         />
