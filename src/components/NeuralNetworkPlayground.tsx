@@ -93,7 +93,7 @@ export function NeuralNetworkPlayground() {
       ctx.fillStyle = `rgba(59, 130, 246, ${neuron.activation})`;
       ctx.fill();
     });
-  };
+  }
 
   useEffect(() => {
     drawNetwork();
