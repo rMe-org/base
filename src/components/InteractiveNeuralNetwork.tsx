@@ -91,7 +91,7 @@ export function InteractiveNeuralNetwork() {
       callbacks: {
         onEpochEnd: (epoch, logs) => {
           setEpoch(epoch);
-          if (logs?.loss) setLoss(logs.loss);
+          setLoss(Number(logs?.loss ?? 0));
         }
       }
     });
