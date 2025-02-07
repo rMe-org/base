@@ -67,32 +67,6 @@ export function NeuralNetworkPlayground() {
     setConnections(newConnections);
   };
 
-  const drawNetwork = () => {
-    if (!canvasRef.current) return;
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
-
-    // Clear canvas
-    ctx.clearRect(0, 0, 800, 400);
-
-    // Draw connections
-    connections.forEach(conn => {
-      ctx.beginPath();
-      ctx.moveTo(conn.from.x, conn.from.y);
-      ctx.lineTo(conn.to.x, conn.to.y);
-      ctx.strokeStyle = `rgba(100, 116, 139, ${Math.abs(conn.weight)})`;
-      ctx.lineWidth = Math.abs(conn.weight) * 3;
-      ctx.stroke();
-    });
-
-    // Draw neurons
-    neurons.forEach(neuron => {
-      ctx.beginPath();
-      ctx.arc(neuron.x, neuron.y, 15, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(59, 130, 246, ${neuron.activation})`;
-      ctx.fill();
-    });
-  };
 
   useEffect(() => {
     initializeNetwork();
@@ -160,7 +134,7 @@ export function NeuralNetworkPlayground() {
       });
     }
 
-    setNeurons(newNeurons, () => drawNetwork());
+    setNeurons(newNeurons);
   };
 
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
