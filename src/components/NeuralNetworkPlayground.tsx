@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Stage, Layer, Circle, Line, Text } from 'react-konva';
 import * as tf from "@tensorflow/tfjs";
 import { motion } from "framer-motion";
 import { Play, Pause, RefreshCw, Info } from "lucide-react";
@@ -73,7 +72,35 @@ export function NeuralNetworkPlayground() {
 
   useEffect(() => {
     initializeNetwork();
-  }, []);
+    drawNetwork();
+  }, [neurons, connections]);
+
+  const drawNetwork = () => {
+    if (!canvasRef.current) return;
+    const ctx = canvasRef.current.getContext('2d');
+    if (!ctx) return;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
+    // Draw connections
+    connections.forEach(conn => {
+      ctx.beginPath();
+      ctx.moveTo(conn.from.x, conn.from.y);
+      ctx.lineTo(conn.to.x, conn.to.y);
+      ctx.strokeStyle = `rgba(100, 116, 139, ${Math.abs(conn.weight)})`;
+      ctx.lineWidth = Math.abs(conn.weight) * 3;
+      ctx.stroke();
+    });
+
+    // Draw neurons
+    neurons.forEach(neuron => {
+      ctx.beginPath();
+      ctx.arc(neuron.x, neuron.y, 15, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(59, 130, 246, ${neuron.activation})`;
+      ctx.fill();
+    });
+  };
 
   const updateNeuronActivations = (input: number[]) => {
     const newNeurons = [...neurons];
@@ -152,34 +179,10 @@ export function NeuralNetworkPlayground() {
       )}
 
       <div className="relative">
-        <Stage width={800} height={400}>
-          <Layer>
-            {/* Draw connections */}
-            {connections.map((conn, i) => (
-              <Line
-                key={i}
-                points={[conn.from.x, conn.from.y, conn.to.x, conn.to.y]}
-                stroke={`rgba(100, 116, 139, ${Math.abs(conn.weight)})`}
-                strokeWidth={Math.abs(conn.weight) * 3}
-              />
-            ))}
-            
-            {/* Draw neurons */}
-            {neurons.map((neuron, i) => (
-              <Circle
-                key={i}
-                x={neuron.x}
-                y={neuron.y}
-                radius={15}
-                fill={`rgba(59, 130, 246, ${neuron.activation})`}
-              />
-            ))}
-          </Layer>
-        </Stage>
         <canvas
           ref={canvasRef}
           onClick={handleCanvasClick}
-          className="absolute inset-0 cursor-pointer"
+          className="cursor-pointer bg-background rounded-lg"
           width={800}
           height={400}
         />
