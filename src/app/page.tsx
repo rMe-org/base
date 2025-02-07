@@ -17,9 +17,8 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl font-bold mb-12 text-center">Technical Showcase</h2>
           <div className="grid grid-cols-2 gap-8">
-              <NeuralNetworkVisualizer />
-              <SkillsRadar />
-            </div>
+            <NeuralNetworkVisualizer />
+            <SkillsRadar />
           </div>
         </div>
       </section>
