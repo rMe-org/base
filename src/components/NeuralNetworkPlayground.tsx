@@ -67,8 +67,7 @@ export function NeuralNetworkPlayground() {
     setNeurons(newNeurons);
   };
 
-  useEffect(() => {
-    initializeNetwork();
+  const drawNetwork = () => {
     if (!canvasRef.current) return;
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return;
@@ -93,7 +92,11 @@ export function NeuralNetworkPlayground() {
       ctx.fillStyle = `rgba(59, 130, 246, ${neuron.activation})`;
       ctx.fill();
     });
-  }
+  };
+
+  useEffect(() => {
+    initializeNetwork();
+  }, []);
 
   useEffect(() => {
     drawNetwork();
