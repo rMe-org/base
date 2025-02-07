@@ -94,8 +94,8 @@ export function MLPlayground() {
           tf.tensor2d([[x, y]])
         ) as tf.Tensor;
         const predData = await pred.data();
-        const predValue = predData[0];
-        row.push(predValue || 0);
+        const predValue = predData[0] ?? 0;
+        row.push(predValue);
         pred.dispose();
       }
       
