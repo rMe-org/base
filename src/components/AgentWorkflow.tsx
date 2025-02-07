@@ -112,10 +112,14 @@ export function AgentWorkflow() {
       // Simulate agent activities
       for (let i = 0; i < nodes.length; i++) {
         const newNodes = [...nodes];
-        newNodes[i] = {
-          ...newNodes[i],
-          className: 'bg-background border-2 border-primary rounded-lg shadow-lg shadow-primary/20'
-        };
+        const node = newNodes[i];
+        if (node) {
+          newNodes[i] = {
+            ...node,
+            className: 'bg-background border-2 border-primary rounded-lg shadow-lg shadow-primary/20',
+            id: node.id // Ensure id is preserved
+          };
+        }
         setNodes(newNodes);
         await new Promise(resolve => setTimeout(resolve, 1000));
       }

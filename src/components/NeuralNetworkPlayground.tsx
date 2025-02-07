@@ -128,7 +128,7 @@ export function NeuralNetworkPlayground() {
           }
         });
         const rawActivation = 1 / (1 + Math.exp(-sum)); // Sigmoid activation
-        const activation = isNaN(rawActivation) ? 0 : Math.max(0, Math.min(1, rawActivation));
+        const activation = isNaN(rawActivation) ? 0 : Math.max(0, Math.min(1, rawActivation)) as number;
         neuron.activation = activation;
       });
     }
