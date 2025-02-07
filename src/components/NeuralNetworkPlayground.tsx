@@ -205,7 +205,7 @@ export function NeuralNetworkPlayground() {
         <canvas
           ref={canvasRef}
           onClick={handleCanvasClick}
-          className="cursor-pointer bg-background rounded-lg"
+          className="bg-background rounded-lg cursor-pointer"
           width={800}
           height={400}
         />
