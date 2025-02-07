@@ -118,10 +118,10 @@ export function MLPlayground() {
       validationSplit: 0.2,
       callbacks: {
         onEpochEnd: async (epoch: number, logs?: tf.Logs) => {
-          setEpoch(typeof epoch === 'number' ? epoch : 0);
-          if (logs) {
-            const lossValue = typeof logs.loss === 'number' ? logs.loss : 0;
-            const accValue = typeof logs.acc === 'number' ? logs.acc : 0;
+          setEpoch(epoch);
+          if (logs?.loss !== undefined && logs?.acc !== undefined) {
+            const lossValue = logs.loss;
+            const accValue = logs.acc;
             setLoss(lossValue);
             setAccuracy(accValue);
             if (epoch % 5 === 0) await generatePredictions();
