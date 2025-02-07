@@ -66,7 +66,6 @@ export function NeuralNetworkPlayground() {
     }
 
     setNeurons(newNeurons);
-    setConnections(newConnections);
   };
 
 
