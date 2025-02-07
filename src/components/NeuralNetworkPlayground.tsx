@@ -97,7 +97,7 @@ export function NeuralNetworkPlayground() {
         let sum = 0;
         prevLayerNeurons.forEach(prevNeuron => {
           const connection = connections.find(
-            c => c.from === prevNeuron && c.to === neuron
+            c => c && c.from === prevNeuron && c.to === neuron
           );
           if (connection && typeof prevNeuron.activation === 'number') {
             sum += prevNeuron.activation * connection.weight;
