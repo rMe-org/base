@@ -2,7 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
-import Plot from 'react-plotly.js';
+import dynamic from 'next/dynamic';
+
+const Plot = dynamic(() => import('react-plotly.js'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[400px] bg-background rounded-lg animate-pulse" />
+  ),
+});
 import { motion } from "framer-motion";
 import { Play, Pause, RefreshCw, Settings2 } from "lucide-react";
 
@@ -198,7 +205,7 @@ export function MLPlayground() {
           </div>
         </div>
         <div className="bg-background rounded-lg p-4">
-          {predictions.length > 0 && (
+          {typeof window !== 'undefined' && predictions.length > 0 && (
             <Plot
               data={[
                 {
