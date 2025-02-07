@@ -86,7 +86,8 @@ export function MLPlayground() {
         const pred = await modelRef.current.predict(
           tf.tensor2d([[x, y]])
         ) as tf.Tensor;
-        row.push(await pred.data()[0]);
+        const predData = await pred.data();
+        row.push(predData[0]);
         pred.dispose();
       }
       
@@ -108,10 +109,10 @@ export function MLPlayground() {
       epochs: config.epochs,
       validationSplit: 0.2,
       callbacks: {
-        onEpochEnd: async (epoch, logs) => {
-          setEpoch(epoch);
+        onEpochEnd: async (epoch: number, logs: any) => {
+          setEpoch(epoch || 0);
           if (logs?.loss) setLoss(logs.loss);
-          if (logs?.acc) setAccuracy(logs.acc);
+          if (logs?.acc) setAccuracy(logs.acc || 0);
           if (epoch % 5 === 0) await generatePredictions();
         }
       }
