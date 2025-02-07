@@ -89,9 +89,10 @@ export function InteractiveNeuralNetwork() {
     await modelRef.current.fit(xs, ys, {
       epochs: 50,
       callbacks: {
-        onEpochEnd: (epoch, logs) => {
+        onEpochEnd: (epoch: number, logs?: tf.Logs) => {
           setEpoch(epoch);
-          setLoss(Number(logs?.loss ?? 0));
+          const lossValue = logs?.loss !== undefined ? Number(logs.loss) : 0;
+          setLoss(lossValue);
         }
       }
     });
