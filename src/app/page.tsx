@@ -4,6 +4,8 @@ import { Hero } from "@/components/Hero";
 import { Navigation } from "@/components/Navigation";
 import { About } from "@/components/About";
 import { Experience } from "@/components/Experience";
+import { NeuralNetworkVisualizer } from "@/components/NeuralNetworkVisualizer";
+import { SkillsRadar } from "@/components/SkillsRadar";
 
 export default function HomePage() {
   return (
