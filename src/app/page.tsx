@@ -5,6 +5,7 @@ import { Navigation } from "@/components/Navigation";
 import { About } from "@/components/About";
 import { Experience } from "@/components/Experience";
 import { NeuralNetworkVisualizer } from "@/components/NeuralNetworkVisualizer";
+import { ModelArchitectureEditor } from "@/components/ModelArchitectureEditor";
 import { AgentWorkflow } from "@/components/AgentWorkflow";
 import { SkillsRadar } from "@/components/SkillsRadar";
 import { MLPlayground } from "@/components/MLPlayground";
@@ -22,6 +23,7 @@ export default function HomePage() {
           <h2 className="text-3xl font-bold mb-12 text-center">Technical Showcase</h2>
           <div className="space-y-8">
             <AgentWorkflow />
+            <ModelArchitectureEditor />
             <NeuralNetworkPlayground />
             <div className="grid grid-cols-2 gap-8">
               <MLPlayground />
