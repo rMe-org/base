@@ -123,8 +123,8 @@ export function MLPlayground() {
             const accValue = Number(logs.acc ?? 0);
             setLoss(lossValue);
             setAccuracy(accValue);
+            if (epoch % 5 === 0) await generatePredictions();
           }
-          if (epoch % 5 === 0) await generatePredictions();
         }
       }
     });

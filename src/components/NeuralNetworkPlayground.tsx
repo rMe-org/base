@@ -101,7 +101,8 @@ export function NeuralNetworkPlayground() {
             sum += (prevNeuron.activation ?? 0) * (connection.weight ?? 0);
           }
         });
-        neuron.activation = 1 / (1 + Math.exp(-sum)); // Sigmoid activation
+        const activation = 1 / (1 + Math.exp(-sum)); // Sigmoid activation
+        neuron.activation = isNaN(activation) ? 0 : activation;
       });
     }
 
