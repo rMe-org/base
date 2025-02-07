@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 import Link from "next/link";
 
 export function Navigation() {
@@ -31,6 +32,7 @@ export function Navigation() {
           <Link href="mailto:Simon.bergeron.home@gmail.com" className="hover:text-primary/80 transition-colors">
             <Mail className="w-5 h-5" />
           </Link>
+          <ThemeToggle />
         </div>
       </div>
     </motion.nav>
