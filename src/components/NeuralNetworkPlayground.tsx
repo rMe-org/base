@@ -92,7 +92,7 @@ export function NeuralNetworkPlayground() {
         prevLayerNeurons.forEach(prevNeuron => {
           const connection = connections.find(
             c => c.from === prevNeuron && c.to === neuron
-          );
+          ) || { weight: 0 };
           if (connection) {
             sum += prevNeuron.activation * connection.weight;
           }
