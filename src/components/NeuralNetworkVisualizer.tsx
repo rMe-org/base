@@ -48,6 +48,7 @@ export function NeuralNetworkVisualizer() {
             const nextLayerIndex = layerIndex + 1;
             if (nextLayerIndex >= layers.length) return;
             const nextNodes = layers[nextLayerIndex];
+            if (typeof nextNodes !== 'number') return;
             const nextHeightSpacing = canvasRef.current!.height / (nextNodes + 1);
 
             for (let j = 0; j < nextNodes; j++) {
