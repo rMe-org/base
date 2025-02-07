@@ -7,6 +7,7 @@ import { Experience } from "@/components/Experience";
 import { NeuralNetworkVisualizer } from "@/components/NeuralNetworkVisualizer";
 import { SkillsRadar } from "@/components/SkillsRadar";
 import { MLPlayground } from "@/components/MLPlayground";
+import { NeuralNetworkPlayground } from "@/components/NeuralNetworkPlayground";
 
 export default function HomePage() {
   return (
@@ -19,9 +20,9 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl font-bold mb-12 text-center">Technical Showcase</h2>
           <div className="space-y-8">
-            <MLPlayground />
+            <NeuralNetworkPlayground />
             <div className="grid grid-cols-2 gap-8">
-              <NeuralNetworkVisualizer />
+              <MLPlayground />
               <SkillsRadar />
             </div>
           </div>
