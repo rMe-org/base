@@ -186,6 +186,49 @@ export function MLPlayground() {
             </button>
           </div>
         </div>
+        <div className="grid grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="p-4 bg-background rounded-lg">
+                <p className="text-sm text-muted-foreground mb-2">Current Epoch</p>
+                <p className="text-2xl font-bold">{epoch}</p>
+              </div>
+              <div className="p-4 bg-background rounded-lg">
+                <p className="text-sm text-muted-foreground mb-2">Loss</p>
+                <p className="text-2xl font-bold">{loss.toFixed(4)}</p>
+              </div>
+              <div className="p-4 bg-background rounded-lg">
+                <p className="text-sm text-muted-foreground mb-2">Accuracy</p>
+                <p className="text-2xl font-bold">{(accuracy * 100).toFixed(1)}%</p>
+              </div>
+              <div className="p-4 bg-background rounded-lg">
+                <p className="text-sm text-muted-foreground mb-2">Parameters</p>
+                <p className="text-2xl font-bold">{config.layers.reduce((a, b) => a + b, 0)}</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-background rounded-lg p-4">
+            {typeof window !== 'undefined' && predictions.length > 0 && (
+              <Plot
+                data={[
+                  {
+                    z: predictions,
+                    type: 'heatmap',
+                    colorscale: 'Viridis',
+                  }
+                ]}
+                layout={{
+                  title: 'Model Predictions',
+                  width: 400,
+                  height: 400,
+                  margin: { t: 30, r: 0, b: 30, l: 30 }
+                }}
+                config={{ displayModeBar: false }}
+              />
+            )}
+          </div>
+        </div>
+      </div>
       <div className="grid grid-cols-2 gap-6">
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
