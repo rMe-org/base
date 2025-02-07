@@ -54,13 +54,15 @@ export function NeuralNetworkPlayground() {
       const neuron = newNeurons[i];
       const nextLayerNeurons = newNeurons.filter(n => n.layer === neuron.layer + 1);
       
-      nextLayerNeurons.forEach(nextNeuron => {
-        newConnections.push({
-          from: neuron,
-          to: nextNeuron,
-          weight: Math.random() * 2 - 1,
+      if (nextLayerNeurons.length > 0) {
+        nextLayerNeurons.forEach(nextNeuron => {
+          newConnections.push({
+            from: neuron,
+            to: nextNeuron,
+            weight: Math.random() * 2 - 1,
+          });
         });
-      });
+      }
     }
 
     setNeurons(newNeurons);
@@ -75,33 +77,6 @@ export function NeuralNetworkPlayground() {
   useEffect(() => {
     drawNetwork();
   }, [neurons, connections]);
-
-  const updateNeuronActivations = (input: number[]) => {
-    if (!canvasRef.current) return;
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
-
-    // Clear canvas
-    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-
-    // Draw connections
-    connections.forEach(conn => {
-      ctx.beginPath();
-      ctx.moveTo(conn.from.x, conn.from.y);
-      ctx.lineTo(conn.to.x, conn.to.y);
-      ctx.strokeStyle = `rgba(100, 116, 139, ${Math.abs(conn.weight)})`;
-      ctx.lineWidth = Math.abs(conn.weight) * 3;
-      ctx.stroke();
-    });
-
-    // Draw neurons
-    neurons.forEach(neuron => {
-      ctx.beginPath();
-      ctx.arc(neuron.x, neuron.y, 15, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(59, 130, 246, ${neuron.activation})`;
-      ctx.fill();
-    });
-  };
 
   const updateNeuronActivations = (input: number[]) => {
     const newNeurons = [...neurons];
@@ -142,7 +117,9 @@ export function NeuralNetworkPlayground() {
     const rect = canvasRef.current.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width;
     const y = (event.clientY - rect.top) / rect.height;
-    updateNeuronActivations([x, y]);
+    if (typeof x === 'number' && typeof y === 'number') {
+      updateNeuronActivations([x, y]);
+    }
   };
 
   return (
