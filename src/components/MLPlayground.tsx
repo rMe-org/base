@@ -121,8 +121,8 @@ export function MLPlayground() {
           setEpoch(epoch);
           if (logs) {
             if (logs) {
-              const lossValue = Number(logs.loss || 0);
-              const accValue = Number(logs.acc || 0);
+              const lossValue = logs?.loss ?? 0;
+              const accValue = logs?.acc ?? 0;
               setLoss(lossValue);
               setAccuracy(accValue);
               if (epoch % 5 === 0) await generatePredictions();
