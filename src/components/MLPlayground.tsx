@@ -94,10 +94,7 @@ export function MLPlayground() {
           tf.tensor2d([[x, y]])
         ) as tf.Tensor;
         const predData = await pred.data();
-        const value = predData[0];
-        if (typeof value === 'number') {
-          row.push(value);
-        }
+        row.push(Number(predData[0]) || 0); // Convert to number, fallback to 0
         pred.dispose();
       }
       
