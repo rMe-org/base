@@ -53,9 +53,12 @@ export function NeuralNetworkPlayground() {
     // Create connections between neurons
     for (let i = 0; i < newNeurons.length; i++) {
       const neuron = newNeurons[i];
+      if (!neuron) continue;
+      
       const nextLayerNeurons = newNeurons.filter(n => n.layer === neuron.layer + 1);
       
       nextLayerNeurons.forEach(nextNeuron => {
+        if (!nextNeuron) return;
         newConnections.push({
           from: neuron,
           to: nextNeuron,
@@ -90,9 +93,10 @@ export function NeuralNetworkPlayground() {
       layerNeurons.forEach(neuron => {
         let sum = 0;
         prevLayerNeurons.forEach(prevNeuron => {
+          if (!prevNeuron) return;
           const connection = connections.find(
             c => c.from === prevNeuron && c.to === neuron
-          ) || { weight: 0 };
+          );
           if (connection) {
             sum += prevNeuron.activation * connection.weight;
           }
