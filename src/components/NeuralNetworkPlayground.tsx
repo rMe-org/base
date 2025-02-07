@@ -26,19 +26,46 @@ export function NeuralNetworkPlayground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef<tf.Sequential>();
 
+  const drawNetwork = () => {
+    if (!canvasRef.current) return;
+    const ctx = canvasRef.current.getContext('2d');
+    if (!ctx) return;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, 800, 400);
+
+    // Draw connections
+    connections.forEach(conn => {
+      ctx.beginPath();
+      ctx.moveTo(conn.from.x, conn.from.y);
+      ctx.lineTo(conn.to.x, conn.to.y);
+      ctx.strokeStyle = `rgba(100, 116, 139, ${Math.abs(conn.weight)})`;
+      ctx.lineWidth = Math.abs(conn.weight) * 3;
+      ctx.stroke();
+    });
+
+    // Draw neurons
+    neurons.forEach(neuron => {
+      ctx.beginPath();
+      ctx.arc(neuron.x, neuron.y, 15, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(59, 130, 246, ${neuron.activation})`;
+      ctx.fill();
+    });
+  };
+
   const initializeNetwork = () => {
-    const layers = [2, 4, 4, 1]; // Network architecture
+    const layers = [2, 4, 4, 1];
     const newNeurons: Neuron[] = [];
     const newConnections: Connection[] = [];
     const width = 800;
     const height = 400;
     const layerSpacing = width / (layers.length + 1);
 
-    layers.forEach((neurons, layerIndex) => {
+    layers.forEach((numNeurons, layerIndex) => {
       const x = layerSpacing * (layerIndex + 1);
-      const neuronSpacing = height / (neurons + 1);
+      const neuronSpacing = height / (numNeurons + 1);
 
-      for (let i = 0; i < neurons; i++) {
+      for (let i = 0; i < numNeurons; i++) {
         const y = neuronSpacing * (i + 1);
         newNeurons.push({
           x,
@@ -49,15 +76,11 @@ export function NeuralNetworkPlayground() {
       }
     });
 
-    // Create connections between neurons
     for (let i = 0; i < newNeurons.length; i++) {
       const neuron = newNeurons[i];
-      if (!neuron) continue;
-      
       const nextLayerNeurons = newNeurons.filter(n => n.layer === neuron.layer + 1);
       
       nextLayerNeurons.forEach(nextNeuron => {
-        if (!nextNeuron) return;
         newConnections.push({
           from: neuron,
           to: nextNeuron,
@@ -66,7 +89,7 @@ export function NeuralNetworkPlayground() {
       });
     }
 
-    setNeurons(newNeurons);
+    setNeurons(newNeurons, () => drawNetwork());
     setConnections(newConnections);
   };
 
@@ -134,7 +157,7 @@ export function NeuralNetworkPlayground() {
       });
     }
 
-    setNeurons(newNeurons);
+    setNeurons(newNeurons, () => drawNetwork());
   };
 
   const handleCanvasClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
