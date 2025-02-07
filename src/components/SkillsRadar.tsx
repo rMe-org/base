@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -74,10 +74,31 @@ export function SkillsRadar() {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-secondary/30 p-6 rounded-xl"
+      className="bg-secondary/30 p-6 rounded-xl relative overflow-hidden"
     >
-      <h3 className="text-2xl font-semibold mb-4">Technical Proficiency</h3>
-      <div className="w-full max-w-md mx-auto">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-2xl font-semibold">Technical Proficiency</h3>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="relative group px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          View Details
+          <motion.div
+            className="absolute -inset-2 border-2 border-primary rounded-lg"
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.2, 0.5, 0.2],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </motion.button>
+      </div>
+      <div className="w-full max-w-md mx-auto relative group">
         <Radar data={data} options={options} />
       </div>
     </motion.div>
