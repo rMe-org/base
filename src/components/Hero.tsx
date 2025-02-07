@@ -43,9 +43,9 @@ export function Hero() {
         >
           <div className="aspect-square rounded-2xl bg-secondary overflow-hidden">
             <img 
-              src="https://images.unsplash.com/photo-1629904853716-f0bc54eea481?q=80&w=2070"
-              alt="AI Visualization"
-              className="w-full h-full object-cover"
+              src="https://pre-built-images.s3.amazonaws.com/webapp-uploads/14341ca1e2b5dc0f820889de37ea64b5.png"
+              alt="Simon's Profile"
+              className="w-full h-full object-contain bg-white dark:bg-zinc-900 p-8"
             />
           </div>
         </motion.div>
