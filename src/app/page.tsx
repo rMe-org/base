@@ -6,6 +6,7 @@ import { About } from "@/components/About";
 import { Experience } from "@/components/Experience";
 import { NeuralNetworkVisualizer } from "@/components/NeuralNetworkVisualizer";
 import { SkillsRadar } from "@/components/SkillsRadar";
+
 export default function HomePage() {
   return (
     <main className="min-h-screen">
