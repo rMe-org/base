@@ -94,7 +94,7 @@ export function MLPlayground() {
           tf.tensor2d([[x, y]])
         ) as tf.Tensor;
         const predData = await pred.data();
-        const predValue = Array.isArray(predData) && predData.length > 0 ? Number(predData[0]) || 0 : 0;
+        const predValue = Array.isArray(predData) && predData.length > 0 && typeof predData[0] === 'number' ? predData[0] : 0;
         row.push(predValue);
         pred.dispose();
       }
@@ -119,9 +119,9 @@ export function MLPlayground() {
       callbacks: {
         onEpochEnd: async (epoch: number, logs?: tf.Logs) => {
           setEpoch(epoch);
-          if (logs) {
-            setLoss(Number(logs.loss) || 0);
-            setAccuracy(Number(logs.acc) || 0);
+          if (logs && typeof logs.loss === 'number' && typeof logs.acc === 'number') {
+            setLoss(logs.loss);
+            setAccuracy(logs.acc);
           }
           if (epoch % 5 === 0) await generatePredictions();
         }
