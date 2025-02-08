@@ -35,15 +35,6 @@ export function MLVideo() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    return () => {
-      // Clean up video stream when component unmounts
-      const stream = videoRef.current?.srcObject as MediaStream;
-      stream?.getTracks().forEach(track => track.stop());
-    };
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
     const processFrame = () => {
       if (!ctx || !video || !canvas) return;
       
@@ -91,6 +82,12 @@ export function MLVideo() {
         video.removeEventListener('play', processFrame);
       };
     }
+    };
+
+    return () => {
+      // Clean up video stream when component unmounts
+      const stream = videoRef.current?.srcObject as MediaStream;
+      stream?.getTracks().forEach(track => track.stop());
     };
   }, [isPlaying]);
 
