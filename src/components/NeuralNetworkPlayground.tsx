@@ -123,7 +123,7 @@ export function NeuralNetworkPlayground() {
           const connection = connections.find(
             c => c.from === prevNeuron && c.to === neuron
           );
-          if (connection && prevNeuron) {
+          if (connection && prevNeuron && typeof prevNeuron.activation === 'number') {
             sum += prevNeuron.activation * connection.weight;
           }
         });
