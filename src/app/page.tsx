@@ -2,6 +2,7 @@
 
 import { Hero } from "@/components/Hero";
 import { ArrowUpCircle } from "lucide-react";
+import { motion } from "framer-motion";
 import { Navigation } from "@/components/Navigation";
 import { About } from "@/components/About";
 import { Experience } from "@/components/Experience";
