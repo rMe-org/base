@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
+import { motion, AnimatePresence } from "framer-motion";
 import { Radar } from 'react-chartjs-2';
 import { motion } from "framer-motion";
 import {
@@ -20,8 +21,23 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
+// Register ChartJS components
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+);
+
 export function SkillsRadar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
   const data = {
     labels: [
       'Machine Learning',
@@ -93,7 +109,7 @@ export function SkillsRadar() {
           <DialogTitle className="text-2xl font-semibold">Technical Proficiency</DialogTitle>
         </DialogHeader>
         <div className="w-full max-w-md mx-auto">
-          <Radar data={data} options={options} />
+          {isClient && <Radar data={data} options={options} />}
         </div>
       </DialogContent>
     </Dialog>
