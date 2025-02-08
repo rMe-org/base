@@ -1,5 +1,9 @@
 @import url('https://rsms.me/inter/inter.css');
 
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -85,10 +89,42 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', sans-serif;
-    
+    @apply bg-[#ffffff] text-[#2D2D2D] antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-feature-settings: 'calt', 'liga', 'dlig';
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-medium tracking-tight;
+  }
+
+  .notion-block {
+    @apply border border-[#EBEBEB] rounded-[2px] bg-white transition-shadow duration-200;
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 0.5px 2px;
+  }
+
+  .notion-block:hover {
+    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 4px;
+  }
+
+  .notion-input {
+    @apply px-3 py-1.5 w-full bg-transparent border border-[#EBEBEB] rounded-[2px] 
+    focus:outline-none focus:ring-1 focus:ring-[#0066FF] transition-shadow;
+  }
+
+  .notion-button {
+    @apply px-4 py-1.5 bg-[#F5F5F5] hover:bg-[#EBEBEB] text-[#2D2D2D] 
+    rounded-[2px] transition-colors duration-150 font-medium text-sm;
+  }
+
+  .notion-slider {
+    @apply h-[2px] bg-[#EBEBEB] rounded-[1px] appearance-none cursor-pointer;
+  }
+
+  .notion-slider::-webkit-slider-thumb {
+    @apply w-[12px] h-[12px] bg-white border border-[#E0E0E0] 
+    rounded-full appearance-none hover:border-[#0066FF] transition-colors;
   }
 
   .notion-slider {
