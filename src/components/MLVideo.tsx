@@ -100,12 +100,12 @@ export function MLVideo() {
     }
 
     return () => {
-      // Clean up video stream when component unmounts
       if (video) {
         video.removeEventListener('play', processFrame);
       }
-      const stream = videoRef.current?.srcObject as MediaStream;
-      stream?.getTracks().forEach(track => track.stop());
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+      }
     };
   }, [isPlaying]);
 
