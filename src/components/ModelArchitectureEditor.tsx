@@ -43,7 +43,7 @@ export function ModelArchitectureEditor() {
     >
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-2xl font-semibold">Model Architecture Editor</h3>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <button
             onClick={addLayer}
             className="p-2 rounded-lg hover:bg-secondary/80 transition-colors"

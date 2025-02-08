@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 
 export function Hero() {
   return (
-    <section className="min-h-screen flex items-center justify-center pt-16">
-      <div className="max-w-7xl mx-auto px-6 py-24 grid grid-cols-2 gap-12">
+    <section className="min-h-[calc(100vh-4rem)] flex items-center justify-center pt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-24 grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}

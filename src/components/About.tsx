@@ -11,17 +11,17 @@ export function About() {
   ];
 
   return (
-    <section id="about" className="py-24 bg-secondary/30">
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="about" className="py-12 md:py-24 bg-secondary/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl font-bold mb-12 text-center"
+          className="text-2xl md:text-3xl font-bold mb-8 md:mb-12 text-center"
         >
           About Me
         </motion.h2>
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {skills.map((skill, index) => (
             <motion.div
               key={skill.title}

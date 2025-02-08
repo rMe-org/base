@@ -144,7 +144,7 @@ export function AgentWorkflow() {
           {isSimulating ? 'Simulating...' : 'Start Simulation'}
         </button>
       </div>
-      <div className="w-full h-[400px] bg-background/95 rounded-lg border border-border">
+      <div className="w-full h-[300px] md:h-[400px] bg-background/95 rounded-lg border border-border">
         <ReactFlow
           nodes={nodes}
           edges={edges}

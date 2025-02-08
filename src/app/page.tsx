@@ -18,10 +18,10 @@ export default function HomePage() {
       <Hero />
       <About />
       <Experience />
-      <section className="py-24 bg-background">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-bold mb-12 text-center">Technical Showcase</h2>
-          <div className="space-y-8">
+      <section className="py-12 md:py-24 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-12 text-center">Technical Showcase</h2>
+          <div className="space-y-6 md:space-y-8">
             <AgentWorkflow />
             <ModelArchitectureEditor />
             <NeuralNetworkPlayground />
