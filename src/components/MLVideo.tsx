@@ -8,6 +8,8 @@ export function MLVideo() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -105,12 +107,31 @@ export function MLVideo() {
       </div>
 
       <div className="relative aspect-video bg-black/5 rounded-lg overflow-hidden">
-        <video
-          ref={videoRef}
-          className="hidden"
-          src="https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4"
-          crossOrigin="anonymous"
-        />
+        {error ? (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-destructive">{error}</p>
+          </div>
+        ) : (
+          <video
+            ref={videoRef}
+            className="hidden"
+            src="/api/video-proxy?url=https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4"
+            crossOrigin="anonymous"
+            onError={(e) => {
+              console.error("Video loading error:", e);
+              setError("Failed to load video. Please try again later.");
+            }}
+            onLoadedData={() => {
+              setIsLoading(false);
+              setError(null);
+            }}
+          />
+        )}
+        {isLoading && !error && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        )}
         <canvas
           ref={canvasRef}
           width={1280}

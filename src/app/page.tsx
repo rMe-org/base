@@ -26,7 +26,9 @@ export default function HomePage() {
             <AgentWorkflow />
             <ModelArchitectureEditor />
             <NeuralNetworkPlayground />
-            <MLVideo />
+            <VideoErrorBoundary>
+              <MLVideo />
+            </VideoErrorBoundary>
             <div className="grid grid-cols-2 gap-8">
               <MLPlayground />
               <SkillsRadar />
