@@ -91,9 +91,8 @@ export function InteractiveNeuralNetwork() {
       callbacks: {
         onEpochEnd: (epoch: number, logs?: tf.Logs) => {
           setEpoch(epoch);
-          if (logs?.loss !== undefined) {
-            setLoss(logs.loss);
-          }
+          const lossValue = logs?.loss ?? 0;
+          setLoss(lossValue);
         }
       }
     });
