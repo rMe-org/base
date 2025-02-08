@@ -124,8 +124,8 @@ export function NeuralNetworkPlayground() {
             c => c.from === prevNeuron && c.to === neuron
           );
           if (connection && prevNeuron) {
-            const activation = Number(prevNeuron.activation || 0);
-            const weight = Number(connection.weight || 0);
+            const activation = prevNeuron.activation ?? 0;
+            const weight = connection.weight ?? 0;
             sum += activation * weight;
           }
         });
