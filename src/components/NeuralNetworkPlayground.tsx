@@ -152,7 +152,7 @@ export function NeuralNetworkPlayground() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="notion-block p-6"
+      className="bg-background border border-border p-6 rounded-lg shadow-sm dark:shadow-none"
     >
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-2xl font-semibold">Interactive Neural Network</h3>

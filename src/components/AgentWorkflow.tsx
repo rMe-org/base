@@ -132,7 +132,7 @@ export function AgentWorkflow() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-secondary/30 p-6 rounded-xl"
+      className="bg-background border border-border p-6 rounded-lg shadow-sm dark:shadow-none"
     >
       <div className="flex items-center justify-between mb-8">
         <h3 className="text-2xl font-semibold">Multi-Agent Collaboration</h3>

@@ -29,7 +29,7 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.2 }}
-              className="bg-background p-6 rounded-xl shadow-sm"
+              className="bg-background border border-border p-6 rounded-lg shadow-sm dark:shadow-none"
             >
               <div className="flex items-center gap-3 mb-4">
                 {skill.icon}

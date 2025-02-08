@@ -44,7 +44,7 @@ export function Experience() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.2 }}
-              className="bg-secondary/30 p-6 rounded-xl"
+              className="bg-background border border-border p-6 rounded-lg shadow-sm dark:shadow-none"
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
