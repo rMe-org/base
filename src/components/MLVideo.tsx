@@ -10,15 +10,33 @@ export function MLVideo() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const isPlayingRef = useRef(isPlaying);
 
   useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
+
+  useEffect(() => {
+    let currentStream: MediaStream | null = null;
+
     const startCamera = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 1280, height: 720 }
+          video: { 
+            width: 1280, 
+            height: 720,
+            facingMode: 'user'
+          }
         });
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+          currentStream = stream;
+          try {
+            await videoRef.current.play();
+          } catch (err) {
+            console.error("Autoplay failed:", err);
+            setError("Failed to start video. Please click play.");
+          }
         }
       } catch (err) {
         console.error("Error accessing camera:", err);
@@ -26,7 +44,9 @@ export function MLVideo() {
       }
     };
 
-    startCamera();
+    if (!currentStream) {
+      startCamera();
+    }
 
     const canvas = canvasRef.current;
     const video = videoRef.current;
@@ -89,26 +109,20 @@ export function MLVideo() {
     };
   }, [isPlaying]);
 
-  const togglePlay = () => {
+  const togglePlay = async () => {
     if (!videoRef.current) return;
     
-    if (isPlaying) {
-      const stream = videoRef.current.srcObject as MediaStream;
-      stream?.getTracks().forEach(track => track.stop());
-      videoRef.current.srcObject = null;
-    } else {
-      navigator.mediaDevices.getUserMedia({
-        video: { width: 1280, height: 720 }
-      }).then(stream => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      }).catch(err => {
-        console.error("Error accessing camera:", err);
-        setError("Failed to access camera. Please allow camera access.");
-      });
+    try {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        await videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    } catch (err) {
+      console.error("Playback error:", err);
+      setError("Failed to play video. Please try again.");
     }
-    setIsPlaying(!isPlaying);
   };
 
   return (
@@ -140,7 +154,7 @@ export function MLVideo() {
         </div>
       </div>
 
-      <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
+      <div className="relative aspect-video bg-secondary rounded-lg overflow-hidden border border-border">
         {error ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-destructive">{error}</p>
