@@ -115,7 +115,7 @@ export function MLVideo() {
           <video
             ref={videoRef}
             className="hidden"
-            src="/api/video-proxy?url=https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4"
+            src="https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4"
             crossOrigin="anonymous"
             onError={(e) => {
               console.error("Video loading error:", e);
