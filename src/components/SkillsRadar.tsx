@@ -22,7 +22,19 @@ ChartJS.register(
   Legend
 );
 
+"use client";
+
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+
 export function SkillsRadar() {
+  const [isOpen, setIsOpen] = useState(false);
   const data = {
     labels: [
       'Machine Learning',
@@ -71,36 +83,24 @@ export function SkillsRadar() {
   };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-secondary/30 p-6 rounded-xl relative overflow-hidden"
-    >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-semibold">Technical Proficiency</h3>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="relative group px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+          className="fixed top-24 right-6 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors z-10"
         >
-          View Details
-          <motion.div
-            className="absolute -inset-2 border-2 border-primary rounded-lg"
-            animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.2, 0.5, 0.2],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
+          Technical Proficiency
         </motion.button>
-      </div>
-      <div className="w-full max-w-md mx-auto relative group">
-        <Radar data={data} options={options} />
-      </div>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Technical Proficiency</DialogTitle>
+        </DialogHeader>
+        <div className="w-full max-w-md mx-auto">
+          <Radar data={data} options={options} />
+        </div>
+      </DialogContent>
     </motion.div>
   );
 }
