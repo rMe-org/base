@@ -90,7 +90,7 @@
 
   body {
     @apply bg-[#ffffff] text-[#2D2D2D] antialiased;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: Inter, system-ui, -apple-system, sans-serif;
     font-feature-settings: 'calt', 'liga', 'dlig';
     -webkit-font-smoothing: antialiased;
   }
@@ -101,11 +101,11 @@
 
   .notion-block {
     @apply border border-[#EBEBEB] rounded-[2px] bg-white transition-shadow duration-200;
-    box-shadow: rgba(0, 0, 0, 0.04) 0px 0.5px 2px;
+    box-shadow: rgb(0 0 0 / 4%) 0 0.5px 2px;
   }
 
   .notion-block:hover {
-    box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 4px;
+    box-shadow: rgb(0 0 0 / 7%) 0 1px 4px;
   }
 
   .notion-input {
@@ -127,13 +127,6 @@
     rounded-full appearance-none hover:border-[#0066FF] transition-colors;
   }
 
-  .notion-slider {
-    @apply h-[3px] bg-[#EBEBEB] rounded-[1px] appearance-none;
-  }
-
-  .notion-slider::-webkit-slider-thumb {
-    @apply w-[14px] h-[14px] bg-white border-[1.5px] border-[#D9D9D9] rounded-full appearance-none cursor-pointer;
-  }
 
   .notion-toggle {
     @apply border border-[#EBEBEB] rounded-[2px] overflow-hidden transition-shadow hover:shadow-[0_1.2px_3.6px_rgba(0,0,0,0.016)];
