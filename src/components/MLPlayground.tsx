@@ -223,7 +223,7 @@ export function MLPlayground() {
                   title: 'Model Predictions',
                   width: 600,
                   height: 300,
-                  margin: { t: 30, r: 0, b: 30, l: 30 }
+                  margin: { t: 30, r: 0, b: 30, l: 30 } as const
                 }}
                 config={{ displayModeBar: false }}
               />
