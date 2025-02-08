@@ -43,7 +43,7 @@ export function Hero() {
         >
           <div className="aspect-square rounded-2xl bg-secondary overflow-hidden">
             <img 
-              src="https://pre-built-images.s3.amazonaws.com/webapp-uploads/49d0b914af24ec7c4539c7fe935ffdc6.jpg"
+              src="https://pre-built-images.s3.amazonaws.com/webapp-uploads/cafa385d6f728d0ee24fc307eadb3cb7.png"
               alt="Simon's Profile"
               className="w-full h-full object-contain bg-white dark:bg-zinc-900 p-8"
             />
