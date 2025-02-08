@@ -12,7 +12,6 @@ import {
 } from 'chart.js';
 import { motion, AnimatePresence } from "framer-motion";
 import { Radar } from 'react-chartjs-2';
-import { motion } from "framer-motion";
 import {
   Dialog,
   DialogContent,
