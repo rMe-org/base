@@ -10,6 +10,7 @@ import { AgentWorkflow } from "@/components/AgentWorkflow";
 import { SkillsRadar } from "@/components/SkillsRadar";
 import { MLPlayground } from "@/components/MLPlayground";
 import { MLVideo } from "@/components/MLVideo";
+import { VideoErrorBoundary } from "@/components/VideoErrorBoundary";
 import { NeuralNetworkPlayground } from "@/components/NeuralNetworkPlayground";
 
 export default function HomePage() {
