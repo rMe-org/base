@@ -35,6 +35,20 @@ export default function HomePage() {
               <MLPlayground />
               <SkillsRadar />
             </div>
+            <motion.div 
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <button 
+                className="px-8 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-lg font-medium flex items-center gap-2 mx-auto"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              >
+                Explore More Projects
+                <ArrowUpCircle className="w-5 h-5" />
+              </button>
+            </motion.div>
           </div>
         </div>
       </section>
