@@ -140,7 +140,7 @@ export function MLVideo() {
         </div>
       </div>
 
-      <div className="relative aspect-video bg-black/5 rounded-lg overflow-hidden">
+      <div className="relative aspect-video bg-black rounded-lg overflow-hidden">
         {error ? (
           <div className="flex items-center justify-center h-full">
             <p className="text-destructive">{error}</p>
@@ -148,7 +148,7 @@ export function MLVideo() {
         ) : (
           <video
             ref={videoRef}
-            className="hidden"
+            className="absolute inset-0 w-full h-full object-cover opacity-0"
             autoPlay
             playsInline
             muted
@@ -171,7 +171,7 @@ export function MLVideo() {
           ref={canvasRef}
           width={1280}
           height={720}
-          className="w-full h-full object-contain"
+          className="w-full h-full object-cover"
         />
       </div>
     </motion.div>
