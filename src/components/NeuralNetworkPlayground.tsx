@@ -185,9 +185,9 @@ export function NeuralNetworkPlayground() {
         <canvas
           ref={canvasRef}
           onClick={handleCanvasClick}
-          className="bg-background/95 rounded-lg cursor-pointer border border-border"
-          width={Math.min(800, ((typeof window !== 'undefined' ? window.innerWidth : 800) - 48))}
-          height={Math.min(400, ((typeof window !== 'undefined' ? window.innerHeight : 400) * 0.5))}
+          className="bg-background/95 rounded-lg cursor-pointer border border-border w-full"
+          width={800}
+          height={400}
         />
       </div>
     </motion.div>

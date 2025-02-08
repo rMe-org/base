@@ -207,7 +207,7 @@ export function MLPlayground() {
               </div>
             </div>
           </div>
-          <div className="bg-background rounded-lg p-4">
+          <div className="bg-background rounded-lg p-4 w-full overflow-hidden">
             {typeof window !== 'undefined' && predictions.length > 0 && (
               <Plot
                 data={[
@@ -219,8 +219,8 @@ export function MLPlayground() {
                 ]}
                 layout={{
                   title: 'Model Predictions',
-                  width: Math.min(400, ((typeof window !== 'undefined' ? window.innerWidth : 400) * 0.8)),
-                  height: Math.min(400, ((typeof window !== 'undefined' ? window.innerHeight : 400) * 0.4)),
+                  width: 400,
+                  height: 400,
                   margin: { t: 30, r: 0, b: 30, l: 30 }
                 }}
                 config={{ displayModeBar: false }}
