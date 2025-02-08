@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+"use client";
+
+import { useEffect } from "react";
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -12,19 +14,6 @@ import {
 } from 'chart.js';
 import { Radar } from 'react-chartjs-2';
 import { motion } from "framer-motion";
-
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
-
-"use client";
-
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
