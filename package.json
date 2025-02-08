@@ -19,8 +19,16 @@
     "test:all": "pnpm run test && pnpm run test:types"
   },
   "dependencies": {
+    "@fontsource/inter": "^5.1.1",
     "@jest/globals": "^29.7.0",
+    "@radix-ui/react-dialog": "^1.1.6",
+    "@radix-ui/react-navigation-menu": "^1.2.5",
+    "@radix-ui/react-tabs": "^1.1.3",
     "@t3-oss/env-nextjs": "^0.11.1",
+    "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs-backend-wasm": "^4.22.0",
+    "@tensorflow/tfjs-vis": "^1.5.1",
+    "@types/chart.js": "^2.9.41",
     "@types/eslint": "^8.56.10",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.14.10",
@@ -28,8 +36,10 @@
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^8.1.0",
     "@typescript-eslint/parser": "^8.1.0",
+    "chart.js": "^4.4.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "d3": "^7.9.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "^15.0.1",
     "eslint-import-resolver-node": "^0.3.9",
@@ -38,13 +48,18 @@
     "geist": "^1.3.0",
     "lucide-react": "^0.468.0",
     "next": "^15.0.1",
+    "next-connect": "^1.0.0",
     "next-themes": "^0.4.4",
+    "plotly.js-dist-min": "^3.0.0",
     "postcss": "^8.4.39",
     "postcss-syntax": "^0.36.2",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.3.1",
+    "react-plotly.js": "^2.6.0",
+    "reactflow": "^11.11.4",
     "recharts": "^2.15.0",
     "stylelint": "^16.13.0",
     "stylelint-config-standard": "^37.0.0",
@@ -60,5 +75,8 @@
   "ct3aMetadata": {
     "initVersion": "7.38.1"
   },
-  "packageManager": "pnpm@9.6.0"
+  "packageManager": "pnpm@9.6.0",
+  "devDependencies": {
+    "@types/plotly.js": "^2.35.2"
+  }
 }
