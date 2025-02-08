@@ -219,8 +219,8 @@ export function MLPlayground() {
                 ]}
                 layout={{
                   title: 'Model Predictions',
-                  width: typeof window !== 'undefined' ? Math.min(400, window.innerWidth * 0.8) : 400,
-                  height: typeof window !== 'undefined' ? Math.min(400, window.innerHeight * 0.4) : 400,
+                  width: typeof window !== 'undefined' ? Math.min(400, (window?.innerWidth ?? 400) * 0.8) : 400,
+                  height: typeof window !== 'undefined' ? Math.min(400, (window?.innerHeight ?? 400) * 0.4) : 400,
                   margin: { t: 30, r: 0, b: 30, l: 30 }
                 }}
                 config={{ displayModeBar: false }}
