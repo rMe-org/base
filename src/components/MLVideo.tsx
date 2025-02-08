@@ -68,9 +68,9 @@ export function MLVideo() {
       // Convert to black and white cartoon style
       for (let i = 0; i < data.length; i += 4) {
         // Get RGB values
-        const r = data[i] || 0;
-        const g = data[i + 1] || 0;
-        const b = data[i + 2] || 0;
+        const r = Number(data[i]) || 0;
+        const g = Number(data[i + 1]) || 0;
+        const b = Number(data[i + 2]) || 0;
         
         // Convert to grayscale
         const gray = (r + g + b) / 3;
