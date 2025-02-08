@@ -79,12 +79,15 @@ export function MLVideo() {
       }
     };
 
-    video.addEventListener('play', () => {
-      processFrame();
-    });
+    if (video) {
+      video.addEventListener('play', () => {
+        processFrame();
+      });
 
-    return () => {
-      video.removeEventListener('play', processFrame);
+      return () => {
+        video.removeEventListener('play', processFrame);
+      };
+    }
     };
   }, [isPlaying]);
 
