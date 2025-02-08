@@ -217,8 +217,8 @@ export function MLPlayground() {
                 ]}
                 layout={{
                   title: 'Model Predictions',
-                  width: 400,
-                  height: 400,
+                  width: 600,
+                  height: 300,
                   margin: { t: 30, r: 0, b: 30, l: 30 }
                 }}
                 config={{ displayModeBar: false }}
@@ -260,8 +260,8 @@ export function MLPlayground() {
               ]}
               layout={{
                 title: 'Model Predictions',
-                width: 400,
-                height: 400,
+                width: 600,
+                height: 300,
                 margin: { t: 30, r: 0, b: 30, l: 30 } as const
               }}
               config={{ displayModeBar: false }}
