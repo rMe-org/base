@@ -73,7 +73,7 @@ export function MLVideo() {
         const b = typeof data[i + 2] === 'number' ? data[i + 2] : 0;
         
         // Convert to grayscale
-        const gray = (r + g + b) / 3;
+        const gray = ((r || 0) + (g || 0) + (b || 0)) / 3;
         
         // Apply threshold for cartoon effect
         const threshold = 128;
