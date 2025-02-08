@@ -85,7 +85,8 @@
   }
 
   body {
-    @apply bg-background text-foreground font-inter antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
     
     font-feature-settings: 'calt', 'liga', 'dlig';
   }
