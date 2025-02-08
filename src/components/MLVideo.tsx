@@ -32,6 +32,9 @@ export function MLVideo() {
     const video = videoRef.current;
     if (!canvas || !video) return;
 
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
     return () => {
       // Clean up video stream when component unmounts
       const stream = videoRef.current?.srcObject as MediaStream;
