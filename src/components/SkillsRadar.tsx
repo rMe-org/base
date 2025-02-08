@@ -101,6 +101,6 @@ export function SkillsRadar() {
           <Radar data={data} options={options} />
         </div>
       </DialogContent>
-    </motion.div>
+    </Dialog>
   );
 }
