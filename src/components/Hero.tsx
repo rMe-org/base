@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Dialog, DialogTrigger } from "./ui/dialog";
 
 export function Hero() {
   return (
@@ -21,6 +22,17 @@ export function Hero() {
             pushing the boundaries of artificial intelligence.
           </p>
           <div className="flex gap-4">
+            <Dialog>
+              <DialogTrigger asChild>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                >
+                  Technical Proficiency
+                </motion.button>
+              </DialogTrigger>
+            </Dialog>
             <a 
               href="#projects" 
               className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"

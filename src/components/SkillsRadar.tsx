@@ -90,15 +90,7 @@ export function SkillsRadar() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          aria-label="View Technical Proficiency"
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              setIsOpen(true);
-            }
-          }}
-          className="fixed top-24 right-6 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-lg"
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
         >
           Technical Proficiency
         </motion.button>
