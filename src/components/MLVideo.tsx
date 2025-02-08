@@ -12,9 +12,31 @@ export function MLVideo() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const startCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 1280, height: 720 }
+        });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (err) {
+        console.error("Error accessing camera:", err);
+        setError("Failed to access camera. Please allow camera access.");
+      }
+    };
+
+    startCamera();
+
     const canvas = canvasRef.current;
     const video = videoRef.current;
     if (!canvas || !video) return;
+
+    return () => {
+      // Clean up video stream when component unmounts
+      const stream = videoRef.current?.srcObject as MediaStream;
+      stream?.getTracks().forEach(track => track.stop());
+    };
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -70,9 +92,20 @@ export function MLVideo() {
     if (!videoRef.current) return;
     
     if (isPlaying) {
-      videoRef.current.pause();
+      const stream = videoRef.current.srcObject as MediaStream;
+      stream?.getTracks().forEach(track => track.stop());
+      videoRef.current.srcObject = null;
     } else {
-      videoRef.current.play();
+      navigator.mediaDevices.getUserMedia({
+        video: { width: 1280, height: 720 }
+      }).then(stream => {
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      }).catch(err => {
+        console.error("Error accessing camera:", err);
+        setError("Failed to access camera. Please allow camera access.");
+      });
     }
     setIsPlaying(!isPlaying);
   };
@@ -115,11 +148,12 @@ export function MLVideo() {
           <video
             ref={videoRef}
             className="hidden"
-            src="https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4"
-            crossOrigin="anonymous"
+            autoPlay
+            playsInline
+            muted
             onError={(e) => {
-              console.error("Video loading error:", e);
-              setError("Failed to load video. Please try again later.");
+              console.error("Camera access error:", e);
+              setError("Failed to access camera. Please allow camera access.");
             }}
             onLoadedData={() => {
               setIsLoading(false);
