@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Play, Pause, RefreshCw } from "lucide-react";
 
@@ -30,9 +30,9 @@ export function MLVideo() {
       // Convert to black and white cartoon style
       for (let i = 0; i < data.length; i += 4) {
         // Get RGB values
-        const r = data[i];
-        const g = data[i + 1];
-        const b = data[i + 2];
+        const r = data[i] || 0;
+        const g = data[i + 1] || 0;
+        const b = data[i + 2] || 0;
         
         // Convert to grayscale
         const gray = (r + g + b) / 3;
