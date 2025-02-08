@@ -9,6 +9,7 @@ import { ModelArchitectureEditor } from "@/components/ModelArchitectureEditor";
 import { AgentWorkflow } from "@/components/AgentWorkflow";
 import { SkillsRadar } from "@/components/SkillsRadar";
 import { MLPlayground } from "@/components/MLPlayground";
+import { MLVideo } from "@/components/MLVideo";
 import { NeuralNetworkPlayground } from "@/components/NeuralNetworkPlayground";
 
 export default function HomePage() {
@@ -25,6 +26,7 @@ export default function HomePage() {
             <AgentWorkflow />
             <ModelArchitectureEditor />
             <NeuralNetworkPlayground />
+            <MLVideo />
             <div className="grid grid-cols-2 gap-8">
               <MLPlayground />
               <SkillsRadar />
