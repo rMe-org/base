@@ -75,14 +75,22 @@ export function SkillsRadar() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="fixed top-24 right-6 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors z-10"
+          aria-label="View Technical Proficiency"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              setIsOpen(true);
+            }
+          }}
+          className="fixed top-24 right-6 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-lg"
         >
           Technical Proficiency
         </motion.button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl bg-background/95 backdrop-blur-sm border-primary/10">
         <DialogHeader>
-          <DialogTitle>Technical Proficiency</DialogTitle>
+          <DialogTitle className="text-2xl font-semibold">Technical Proficiency</DialogTitle>
         </DialogHeader>
         <div className="w-full max-w-md mx-auto">
           <Radar data={data} options={options} />
