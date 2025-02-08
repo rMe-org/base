@@ -111,7 +111,7 @@ export function ModelArchitectureEditor() {
 
       <div className="mt-6 p-4 bg-background rounded-lg border border-border">
         <h4 className="text-lg font-semibold mb-4">Architecture Preview</h4>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4 overflow-x-auto">
           {layers.map((layer, index) => (
             <div key={index} className="text-center">
               <div className="w-20 h-20 flex items-center justify-center bg-primary/10 rounded-lg mb-2">
