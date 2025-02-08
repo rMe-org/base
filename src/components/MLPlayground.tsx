@@ -95,7 +95,7 @@ export function MLPlayground() {
         ) as tf.Tensor;
         const predData = await pred.data();
         const predValue = Array.isArray(predData) && predData.length > 0 
-          ? Number(predData[0] ?? 0)
+          ? Number(predData[0]) || 0
           : 0;
         row.push(predValue);
         pred.dispose();
