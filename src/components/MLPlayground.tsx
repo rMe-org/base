@@ -121,8 +121,8 @@ export function MLPlayground() {
           setEpoch(epoch);
           const lossValue = logs?.loss ?? 0;
           const accuracyValue = logs?.acc ?? 0;
-          setLoss(Number(lossValue));
-          setAccuracy(Number(accuracyValue));
+          setLoss(Number(lossValue || 0));
+          setAccuracy(Number(accuracyValue || 0));
           if (epoch % 5 === 0) await generatePredictions();
         }
       }
