@@ -132,7 +132,6 @@
     rounded-full appearance-none hover:border-[#0066FF] transition-colors;
   }
 
-
   .notion-toggle {
     @apply border border-[#EBEBEB] rounded-[2px] overflow-hidden transition-shadow hover:shadow-[0_1.2px_3.6px_rgba(0,0,0,0.016)];
   }
