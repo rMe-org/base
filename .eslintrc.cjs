@@ -5,7 +5,7 @@ const config = {
     // "project": true,
     "project": "./tsconfig.json",
   },
-  // "ignorePatterns": ["*.css", "*.scss"],
+  "ignorePatterns": ["supabase/functions/**/*.ts"],
   "plugins": [
     "@typescript-eslint",
     "react",
