@@ -1,3 +1,6 @@
+import '../styles/fadc7fae00b14d7a.css'
+import '../styles/inline_style_0.css'
+
 import React from "react";
 import "@/styles/globals.css";
 
