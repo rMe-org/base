@@ -19,6 +19,15 @@ const config = {
   },
   webpack: (config, { isServer }) => {
     config.stats = "verbose";
+    if (!isServer) {
+      config.devtool = "source-map";
+      config.resolve.fallback = {
+        fs: false,
+        path: false,
+        os: false,
+        crypto: false,
+      };
+    }
     return config;
   },
 };
