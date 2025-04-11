@@ -14,7 +14,7 @@ COPY . .
 RUN bun install
 
 # Install git and configure it
-RUN apt-get update && apt-get install -y git && \
+RUN apt-get update -y && apt-get install -y git && \
     cd /app && \
     git init && \
     git config --system --add safe.directory /app && \
