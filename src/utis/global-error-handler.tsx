@@ -4,6 +4,9 @@ import { useEffect } from "react";
 import ErrorStackParser from "error-stack-parser";
 import { initBuildErrorDetector } from "./build-error-detector";
 
+// Add console log to verify the module is loaded
+console.log('★★★ GLOBAL ERROR HANDLER MODULE LOADED ★★★');
+
 // Define the interface for error location info, matching the one in creatr.scripts.tsx
 interface ErrorLocationInfo {
   functionName: string;
@@ -12,13 +15,38 @@ interface ErrorLocationInfo {
   column: number;
   message: string;
   stack:
-    | Array<{
-        fileName: string;
-        lineNumber: number;
-        columnNumber: number;
-        functionName: string;
-      }>
-    | string;
+  | Array<{
+    fileName: string;
+    lineNumber: number;
+    columnNumber: number;
+    functionName: string;
+  }>
+  | string;
+}
+
+// Helper function to clean webpack internal paths from file paths
+function cleanWebpackPath(path: string): string {
+  if (!path) return path;
+
+  // Common webpack internal path patterns
+  const patterns = [
+    "webpack-internal:///app-pages-browser/.",
+    "webpack-internal:///",
+    "webpack://",
+    "webpack:///./",
+    "webpack:///",
+    "webpack:/(_N_E)/"
+  ];
+
+  let cleanedPath = path;
+  for (const pattern of patterns) {
+    cleanedPath = cleanedPath.replace(pattern, "");
+  }
+
+  // Also clean up any remaining webpack paths with a more generic regex
+  cleanedPath = cleanedPath.replace(/webpack[:\-][\/\\]{2,}[^\/\\]*[\/\\]?/g, "");
+
+  return cleanedPath;
 }
 
 // Implementation of getErrorLocation similar to the one in creatr.scripts.tsx
@@ -39,7 +67,7 @@ async function getErrorLocation(error: Error): Promise<ErrorLocationInfo> {
 
     const bundledLocations = relevantFrames.map((frame) => ({
       fileName: frame.fileName
-        ? frame.fileName.replace("webpack-internal:///app-pages-browser/.", "")
+        ? cleanWebpackPath(frame.fileName)
         : "",
       lineNumber: frame.lineNumber,
       columnNumber: frame.columnNumber,
@@ -76,18 +104,19 @@ async function getErrorLocation(error: Error): Promise<ErrorLocationInfo> {
   }
 }
 
-// New function to handle build errors
+// New function to handle build errors - generalized to detect different types of build errors
 function isBuildError(error: Error | any): boolean {
   if (!error) return false;
 
-  // Check if it's a build error from webpack
-  const isBuildErrorMessage = 
+  // Check if it's a build error from webpack without hardcoding specific error messages
+  const isBuildErrorMessage =
     (error.message && typeof error.message === 'string' && (
       error.message.includes('Failed to compile') ||
       error.message.includes('Build error') ||
       error.message.includes('Module build failed') ||
       error.message.includes('webpack') ||
-      error.message.includes('Compilation error')
+      error.message.includes('Compilation error') ||
+      error.message.includes('Module not found')
     )) ||
     (error.stack && typeof error.stack === 'string' && (
       error.stack.includes('webpack') ||
@@ -99,10 +128,13 @@ function isBuildError(error: Error | any): boolean {
 }
 
 export function GlobalErrorHandler(): JSX.Element {
+  console.log('★★★ GLOBAL ERROR HANDLER COMPONENT MOUNTED ★★★');
+
   useEffect(() => {
+    console.log('★★★ GLOBAL ERROR HANDLER EFFECT RUNNING ★★★');
     // Initialize the build error detector
     initBuildErrorDetector();
-    
+
     // Handle unhandled rejections
     const handleGlobalRejection = (event: PromiseRejectionEvent) => {
       // Prevent default handling
@@ -112,9 +144,9 @@ export function GlobalErrorHandler(): JSX.Element {
 
       // Check if it's a build error
       const isBuildErrorDetected = isBuildError(event.reason);
-      
+
       // Remove NextAuth error detection
-      
+
       if (isBuildErrorDetected) {
         console.warn("Build error intercepted:", {
           message: event.reason?.message,
@@ -126,17 +158,20 @@ export function GlobalErrorHandler(): JSX.Element {
           event.reason instanceof Error
             ? event.reason
             : new Error(
-                typeof event.reason === "string"
-                  ? event.reason
-                  : String(event.reason),
-              );
+              typeof event.reason === "string"
+                ? event.reason
+                : String(event.reason),
+            );
 
         getErrorLocation(errorObject)
           .then((locationInfo: ErrorLocationInfo) => {
             try {
+              // Ensure source path is cleaned
+              const source = cleanWebpackPath(locationInfo.source);
+
               // First window.parent.postMessage call - build error from unhandled rejection
               console.log("[SENDING TO PARENT] Build error from unhandled rejection:", {
-                source: locationInfo.source,
+                source,
                 message: locationInfo.message || String(event.reason),
                 stack: typeof locationInfo.stack === 'string' ? locationInfo.stack.substring(0, 200) + '...' : '(stack object)',
                 url: window.location.href,
@@ -148,7 +183,7 @@ export function GlobalErrorHandler(): JSX.Element {
                 {
                   type: "ERROR",
                   payload: {
-                    source: locationInfo.source,
+                    source,
                     message: locationInfo.message || String(event.reason),
                     stack: locationInfo.stack,
                     url: window.location.href,
@@ -168,9 +203,9 @@ export function GlobalErrorHandler(): JSX.Element {
 
         return;
       }
-      
+
       // Remove NextAuth error handling
-      
+
       // For other errors, let them propagate to the regular error boundary
     };
 
@@ -189,13 +224,14 @@ export function GlobalErrorHandler(): JSX.Element {
       // Create a string representation of the error
       const errorString = args.join(" ");
 
-      // Check if this is a build error
-      const isBuildErrorDetected = 
+      // Check if this is a build error - using generic patterns
+      const isBuildErrorDetected =
         errorString.includes("Failed to compile") ||
         errorString.includes("Build error") ||
         errorString.includes("Module build failed") ||
         errorString.includes("webpack") ||
-        errorString.includes("Compilation error");
+        errorString.includes("Compilation error") ||
+        errorString.includes("Module not found");
 
       if (isBuildErrorDetected) {
         console.log("INTERCEPTED BUILD ERROR:", ...args);
@@ -234,11 +270,34 @@ export function GlobalErrorHandler(): JSX.Element {
           }
         }
 
+        // Look for file path in the error message
+        // Look for .tsx, .ts, .js, .jsx, or .css files in the error message
+        const filePathMatches = errorString.match(/[^\s"']+?\.(tsx|ts|js|jsx|css)(?::\d+(?::\d+)?)?/g);
+        let filePath = null;
+        let line = 0;
+        let column = 0;
+
+        if (filePathMatches) {
+          // Extract the first file path
+          const filePathWithLine = filePathMatches[0];
+          const filePathParts = filePathWithLine.split(':');
+
+          filePath = cleanWebpackPath(filePathParts[0]);
+          if (filePathParts.length > 1) {
+            line = parseInt(filePathParts[1], 10) || 0;
+          }
+          if (filePathParts.length > 2) {
+            column = parseInt(filePathParts[2], 10) || 0;
+          }
+        }
+
         // Send error to parent window
         try {
+          const source = filePath || "webpack-build";
+
           // Build error - direct from console.error
           console.log("[SENDING TO PARENT] Build error from console.error:", {
-            source: "webpack-build",
+            source,
             message: errorString.substring(0, 200) + (errorString.length > 200 ? '...' : ''),
             stack: errorObj.stack ? (errorObj.stack.substring(0, 200) + '...') : '(no stack)',
             timestamp: new Date().toISOString(),
@@ -249,7 +308,10 @@ export function GlobalErrorHandler(): JSX.Element {
             {
               type: "ERROR",
               payload: {
-                source: "webpack-build",
+                source,
+                file: filePath,
+                line,
+                column,
                 message: errorString,
                 stack: errorObj.stack || "",
                 url: window.location.href,
@@ -275,13 +337,16 @@ export function GlobalErrorHandler(): JSX.Element {
         getErrorLocation(errorObj)
           .then((locationInfo: ErrorLocationInfo) => {
             try {
+              // Ensure source path is cleaned
+              const source = cleanWebpackPath(locationInfo.source) || (filePath || "webpack-build");
+
               // Parsed build error from console.error
               console.log("[SENDING TO PARENT] Parsed build error from console.error:", {
-                source: locationInfo.source || "webpack-build",
+                source,
                 message: errorString.substring(0, 200) + (errorString.length > 200 ? '...' : ''),
                 stack: typeof locationInfo.stack === 'string' ? locationInfo.stack.substring(0, 200) + '...' : '(stack object)',
-                line: locationInfo.line,
-                column: locationInfo.column,
+                line: locationInfo.line || line,
+                column: locationInfo.column || column,
                 timestamp: new Date().toISOString(),
                 type: "build error",
                 origin: "console error - parsed"
@@ -290,10 +355,12 @@ export function GlobalErrorHandler(): JSX.Element {
                 {
                   type: "ERROR",
                   payload: {
-                    source: locationInfo.source || "webpack-build",
+                    source,
                     message: errorString,
                     stack: locationInfo.stack,
                     url: window.location.href,
+                    line: locationInfo.line || line,
+                    column: locationInfo.column || column,
                     timestamp: new Date().toISOString(),
                     isBuildError: true,
                     consoleError: true,
@@ -309,7 +376,7 @@ export function GlobalErrorHandler(): JSX.Element {
             console.error("Failed to get error location:", e);
           });
       }
-      
+
       // Remove NextAuth error check
     };
 
@@ -317,27 +384,37 @@ export function GlobalErrorHandler(): JSX.Element {
     const handleBuildErrorEvent = (event: any) => {
       if (event.detail && event.detail.error) {
         console.warn("Build error event detected:", event.detail);
-        
+
         // Get the error object from the event
-        const errorObj = event.detail.error instanceof Error 
-          ? event.detail.error 
+        const errorObj = event.detail.error instanceof Error
+          ? event.detail.error
           : new Error(String(event.detail.error));
-        
+
         // Check if we've already sent this error to parent window
         if (event.detail.sentToParent) {
           return;
         }
-        
+
+        // Clean any webpack paths in the event details
+        if (event.detail.source) {
+          event.detail.source = cleanWebpackPath(event.detail.source);
+        }
+        if (event.detail.file) {
+          event.detail.file = cleanWebpackPath(event.detail.file);
+        }
+
         // If the error already has location information from build-error-detector.ts,
         // use it directly to send to the parent window
-        if (event.detail.source !== undefined && 
-            event.detail.line !== undefined && 
-            event.detail.column !== undefined) {
-          
+        if (event.detail.source !== undefined &&
+          event.detail.line !== undefined &&
+          event.detail.column !== undefined) {
+
           try {
+            const source = cleanWebpackPath(event.detail.source) || "webpack-build";
+
             // Build error - direct from build event
             console.log("[SENDING TO PARENT] Direct build error from build event:", {
-              source: event.detail.source || "webpack-build",
+              source,
               message: errorObj.message.substring(0, 200) + (errorObj.message.length > 200 ? '...' : ''),
               line: event.detail.line || 0,
               column: event.detail.column || 0,
@@ -353,7 +430,7 @@ export function GlobalErrorHandler(): JSX.Element {
                 type: "ERROR",
                 payload: {
                   message: errorObj.message,
-                  source: event.detail.source || "webpack-build",
+                  source,
                   line: event.detail.line || 0,
                   column: event.detail.column || 0,
                   stack: errorObj.stack || "",
@@ -371,12 +448,12 @@ export function GlobalErrorHandler(): JSX.Element {
               },
               "*"
             );
-            
+
             // Mark as sent
             event.detail.sentToParent = true;
-            
+
             console.log("Sent build error to parent window with direct location info:", {
-              source: event.detail.source,
+              source,
               message: errorObj.message,
             });
           } catch (e) {
@@ -387,15 +464,18 @@ export function GlobalErrorHandler(): JSX.Element {
           getErrorLocation(errorObj)
             .then((locationInfo: ErrorLocationInfo) => {
               try {
+                const source = cleanWebpackPath(locationInfo.source) || "webpack-build";
+                const file = cleanWebpackPath(event.detail.file) || source;
+
                 // Build error - parsed from build event
                 console.log("[SENDING TO PARENT] Parsed build error from build event:", {
-                  source: locationInfo.source || "webpack-build",
+                  source,
                   message: errorObj.message?.substring(0, 200) + (errorObj.message?.length > 200 ? '...' : ''),
                   stack: typeof locationInfo.stack === 'string' ? locationInfo.stack.substring(0, 200) + '...' : '(stack object)',
                   line: locationInfo.line,
                   column: locationInfo.column,
                   buildErrorType: event.detail.buildErrorType || "unknown",
-                  file: event.detail.file || locationInfo.source,
+                  file,
                   timestamp: new Date().toISOString(),
                   type: "build error",
                   origin: "build event - parsed"
@@ -404,7 +484,7 @@ export function GlobalErrorHandler(): JSX.Element {
                   {
                     type: "ERROR",
                     payload: {
-                      source: locationInfo.source || "webpack-build",
+                      source,
                       message: errorObj.message || "Build error",
                       stack: locationInfo.stack,
                       url: window.location.href,
@@ -416,18 +496,18 @@ export function GlobalErrorHandler(): JSX.Element {
                       column: locationInfo.column,
                       buildErrorType: event.detail.buildErrorType || "unknown",
                       moduleError: event.detail.moduleError || null,
-                      file: event.detail.file || locationInfo.source,
+                      file,
                       isChunkLoadError: event.detail.isChunkLoadError || false
                     },
                   },
                   "*"
                 );
-                
+
                 // Mark as sent
                 event.detail.sentToParent = true;
-                
+
                 console.log("Sent parsed build error to parent window:", {
-                  source: locationInfo.source,
+                  source,
                   message: errorObj.message,
                 });
               } catch (e) {
@@ -436,7 +516,7 @@ export function GlobalErrorHandler(): JSX.Element {
             })
             .catch((e) => {
               console.error("Failed to get error location:", e);
-              
+
               // If parsing fails, still try to send basic error info
               try {
                 // Build error - fallback from build event

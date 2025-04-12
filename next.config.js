@@ -38,8 +38,13 @@ const config = {
         if (entries['main.js']) {
           if (Array.isArray(entries['main.js'])) {
             entries['main.js'].push('./src/utis/build-error-detector.ts');
+            entries['main.js'].push('./src/utis/global-error-handler.tsx');
           } else {
-            entries['main.js'] = [entries['main.js'], './src/utis/build-error-detector.ts'];
+            entries['main.js'] = [
+              entries['main.js'],
+              './src/utis/build-error-detector.ts',
+              './src/utis/global-error-handler.tsx'
+            ];
           }
         }
 

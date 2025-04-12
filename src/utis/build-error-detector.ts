@@ -8,6 +8,9 @@
 
 import ErrorStackParser from "error-stack-parser";
 
+// Log immediately when this module is loaded
+console.log('★★★ BUILD ERROR DETECTOR LOADED ★★★');
+
 // Add TypeScript declarations for Next.js error overlay properties
 declare global {
   interface Window {
@@ -44,19 +47,19 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
     parsedMessage: null,
     improvedStack: [],
   };
-  
+
   if (!error) return details;
-  
+
   const errorMessage = error.message || (typeof error === 'string' ? error : '');
 
   // Log the exact error message for debugging
   console.log("[DEBUG] Raw error message:", errorMessage);
-  
+
   // Next.js-specific error pattern with file, line, and column in brackets
   // Matches formats like "╭─[/path/to/file.tsx:65:1]"
   const nextjsErrorPattern = /╭─\[(.+?):(\d+):(\d+)\]/;
   const nextjsMatch = errorMessage.match(nextjsErrorPattern);
-  
+
   if (nextjsMatch) {
     console.log("[DEBUG] Found Next.js error pattern match");
     details.file = nextjsMatch[1];
@@ -70,7 +73,7 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
   if (!details.file) {
     const fileLineColPattern = /(?:\[|\s|^)([^()[\]]+?):(\d+):(\d+)(?:\]|\s|$)/;
     const fileLineColMatch = errorMessage.match(fileLineColPattern);
-    
+
     if (fileLineColMatch) {
       console.log("[DEBUG] Found standard file:line:column pattern match");
       details.file = fileLineColMatch[1];
@@ -79,24 +82,24 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
       details.source = details.file;
     }
   }
-  
+
   // Path shown in "File: path/to/file.js" format
   if (!details.file) {
     const filePattern = /File:\s+(.+?\.[a-zA-Z0-9]+)/;
     const fileMatch = errorMessage.match(filePattern);
-    
+
     if (fileMatch) {
       console.log("[DEBUG] Found File: pattern match");
       details.file = fileMatch[1];
       details.source = details.file;
     }
   }
-  
+
   // Extract the actual error message without the file info
   // Next.js specific error format (with ×)
   const nextjsErrorDescriptionPattern = /Error:\s+×\s+(.+?)(?:\n|$)/;
   const nextjsErrorMatch = errorMessage.match(nextjsErrorDescriptionPattern);
-  
+
   if (nextjsErrorMatch) {
     console.log("[DEBUG] Found Next.js error description match");
     details.parsedMessage = nextjsErrorMatch[1].trim();
@@ -104,21 +107,21 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
     // Standard error message format
     const errorPattern = /Error:\s+(.+?)(?:\n|$)/;
     const errorMatch = errorMessage.match(errorPattern);
-    
+
     if (errorMatch) {
       console.log("[DEBUG] Found standard error description match");
       details.parsedMessage = errorMatch[1].trim();
     }
   }
-  
+
   // Try to detect module build errors from SWC/Babel/etc
   const moduleBuildErrorPattern = /Module build failed.*?:\s*([\s\S]+?)(?:\n\n|\n(?=at)|$)/;
   const moduleBuildMatch = errorMessage.match(moduleBuildErrorPattern);
-  
+
   if (moduleBuildMatch) {
     console.log("[DEBUG] Found module build error match");
     const moduleBuildError = moduleBuildMatch[1].trim();
-    
+
     // Try to extract file info from the module build error
     const moduleFileMatch = moduleBuildError.match(nextjsErrorPattern);
     if (moduleFileMatch && !details.file) {
@@ -128,25 +131,25 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
       details.column = parseInt(moduleFileMatch[3], 10);
       details.source = details.file;
     }
-    
+
     // If we haven't found an error message yet, use the module build error
     if (!details.parsedMessage) {
-      const moduleErrorMatch = moduleBuildError.match(nextjsErrorDescriptionPattern) || 
-                              moduleBuildError.match(/Error:\s+(.+?)(?:\n|$)/);
-      
+      const moduleErrorMatch = moduleBuildError.match(nextjsErrorDescriptionPattern) ||
+        moduleBuildError.match(/Error:\s+(.+?)(?:\n|$)/);
+
       details.parsedMessage = moduleErrorMatch
         ? moduleErrorMatch[1].trim()
         : moduleBuildError;
     }
   }
-  
+
   // If we still don't have a reasonable error message, use the first line
   // or truncate the full message
   if (!details.parsedMessage && errorMessage) {
     const firstLine = errorMessage.split('\n')[0].trim();
     details.parsedMessage = firstLine || errorMessage.substring(0, 100);
   }
-  
+
   // Handle raw data from the error-overlay component
   if (error.rawError && error.rawError.loc) {
     console.log("[DEBUG] Found raw error data with location info");
@@ -155,7 +158,7 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
       details.file = error.rawError.moduleId;
       details.source = details.file;
     }
-    
+
     // Next.js error-overlay often has precise location info
     if (error.rawError.loc) {
       console.log("[DEBUG] Using loc from raw error");
@@ -163,7 +166,7 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
       details.column = error.rawError.loc.column || details.column;
     }
   }
-  
+
   // Extract information from the raw event if available
   if (error.rawEvent) {
     console.log("[DEBUG] Found raw event data");
@@ -172,56 +175,56 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
       details.file = error.rawEvent.filename;
       details.source = details.file;
     }
-    
+
     if (error.rawEvent.lineno && !details.line) {
       console.log("[DEBUG] Using lineno from raw event");
       details.line = error.rawEvent.lineno;
     }
-    
+
     if (error.rawEvent.colno && !details.column) {
       console.log("[DEBUG] Using colno from raw event");
       details.column = error.rawEvent.colno;
     }
   }
-  
+
   // Use ErrorStackParser as a last resort if we don't have location info
   let stackParsed = false;
   try {
     if (error instanceof Error || (error && error.stack)) {
       console.log("[DEBUG] Parsing error stack with ErrorStackParser");
       const stackFrames = ErrorStackParser.parse(error);
-	  console.log("[DEBUG] Stack frames:", stackFrames);
-	  
+      console.log("[DEBUG] Stack frames:", stackFrames);
+
       // Create improved stack with cleaner file paths
       const improvedStack = stackFrames.map(frame => ({
-        fileName: frame.fileName 
+        fileName: frame.fileName
           ? frame.fileName.replace("webpack-internal:///app-pages-browser/.", "")
           : "",
         lineNumber: frame.lineNumber || 0,
         columnNumber: frame.columnNumber || 0,
         functionName: frame.functionName || "",
       }));
-      
-      console.log("[DEBUG] Extracted stack frames:", 
-        improvedStack.length > 0 
-          ? `${improvedStack.length} frames, first: ${JSON.stringify(improvedStack[0])}` 
+
+      console.log("[DEBUG] Extracted stack frames:",
+        improvedStack.length > 0
+          ? `${improvedStack.length} frames, first: ${JSON.stringify(improvedStack[0])}`
           : "none");
-      
+
       // Filter out frames from node_modules and internal webpack files
       const relevantFrames = improvedStack.filter(frame => {
         const fileName = frame.fileName || '';
-        return fileName && 
-              !fileName.includes('node_modules') && 
-              !fileName.includes('webpack-internal:') &&
-              !fileName.includes('webpack/bootstrap') &&
-              !fileName.includes('error-detector');
+        return fileName &&
+          !fileName.includes('node_modules') &&
+          !fileName.includes('webpack-internal:') &&
+          !fileName.includes('webpack/bootstrap') &&
+          !fileName.includes('error-detector');
       });
-      
-      console.log("[DEBUG] Relevant frames after filtering:", 
-        relevantFrames.length > 0 
-          ? `${relevantFrames.length} frames, first: ${JSON.stringify(relevantFrames[0])}` 
+
+      console.log("[DEBUG] Relevant frames after filtering:",
+        relevantFrames.length > 0
+          ? `${relevantFrames.length} frames, first: ${JSON.stringify(relevantFrames[0])}`
           : "none");
-      
+
       // Only use stack info if we don't have better file info already
       if (relevantFrames.length > 0 && !details.file) {
         stackParsed = true;
@@ -233,26 +236,26 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
         details.column = firstFrame.columnNumber;
         details.functionName = firstFrame.functionName;
       }
-      
+
       details.improvedStack = relevantFrames.length > 0 ? relevantFrames : improvedStack;
     }
   } catch (stackError) {
     console.error("[DEBUG] Failed to parse error stack:", stackError);
   }
-  
+
   // Prioritize user code over system files if we have stack data
   if (details.source && (
-      details.source.includes('node_modules') || 
-      details.source.includes('webpack') ||
-      details.source.includes('next/dist')
+    details.source.includes('node_modules') ||
+    details.source.includes('webpack') ||
+    details.source.includes('next/dist')
   ) && details.improvedStack && details.improvedStack.length > 0) {
     console.log("[DEBUG] Trying to find better source in stack frames");
     // Look for a better source in the improved stack
     for (const frame of details.improvedStack) {
-      if (frame.fileName && 
-          !frame.fileName.includes('node_modules') && 
-          !frame.fileName.includes('webpack') &&
-          !frame.fileName.includes('next/dist')) {
+      if (frame.fileName &&
+        !frame.fileName.includes('node_modules') &&
+        !frame.fileName.includes('webpack') &&
+        !frame.fileName.includes('next/dist')) {
         console.log("[DEBUG] Found better source in stack:", frame.fileName);
         details.source = frame.fileName;
         details.file = frame.fileName;
@@ -263,7 +266,7 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
       }
     }
   }
-  
+
   // Try to identify the most logical buildErrorType
   if (!details.buildErrorType) {
     if (errorMessage.includes('Module build failed')) {
@@ -274,11 +277,13 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
       details.buildErrorType = 'syntax-error';
     } else if (errorMessage.includes('Loading chunk')) {
       details.buildErrorType = 'chunk-loading';
+    } else if (errorMessage.includes('Module not found')) {
+      details.buildErrorType = 'module-not-found';
     } else {
       details.buildErrorType = 'webpack';
     }
   }
-  
+
   // Log the extracted details
   console.log("[DEBUG] Extracted error details:", {
     file: details.file,
@@ -290,7 +295,7 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
     improvedStackLength: details.improvedStack.length,
     stackParsed
   });
-  
+
   return details;
 }
 
@@ -305,32 +310,32 @@ function sendErrorToParent(error: Error, details: Record<string, any> = {}) {
       origin: details.origin,
       buildErrorType: details.buildErrorType
     });
-    
+
     // Parse detailed error information
     const errorDetails = parseDetailedBuildError(error);
-    
+
     // Merge the parsed details with the provided details
     const mergedDetails: Record<string, any> = {
       ...errorDetails,
       // We only want to override with provided details if they actually exist
-    //   source: details.source || errorDetails.source || "webpack-build",
-    //   file: details.file || errorDetails.file,
-    //   line: details.line || errorDetails.line || 0,
-    //   column: details.column || errorDetails.column || 0,
-    //   improvedStack: errorDetails.improvedStack || details.improvedStack || [],
-    //   buildErrorType: details.buildErrorType || errorDetails.buildErrorType || "unknown",
-    //   origin: details.origin || "build-error-detector",
+      //   source: details.source || errorDetails.source || "webpack-build",
+      //   file: details.file || errorDetails.file,
+      //   line: details.line || errorDetails.line || 0,
+      //   column: details.column || errorDetails.column || 0,
+      //   improvedStack: errorDetails.improvedStack || details.improvedStack || [],
+      //   buildErrorType: details.buildErrorType || errorDetails.buildErrorType || "unknown",
+      //   origin: details.origin || "build-error-detector",
     };
-    
+
     // Use parsed message if available
     const displayMessage = errorDetails.parsedMessage || error.message;
-    
+
     // For better debugging, ensure we capture module errors even if they come through different paths
     if (!mergedDetails.moduleError && errorDetails.file && errorDetails.file.includes('module')) {
       mergedDetails.moduleError = errorDetails.file;
     }
 
-    
+
     // Log the error details before sending to parent
     console.log("[SENDING TO PARENT] Build error from detector:", {
       file: mergedDetails.file,
@@ -344,7 +349,7 @@ function sendErrorToParent(error: Error, details: Record<string, any> = {}) {
       origin: mergedDetails.origin,
       stackFrames: mergedDetails.improvedStack
     });
-    
+
     window.parent.postMessage(
       {
         type: "ERROR",
@@ -376,27 +381,27 @@ if (typeof window !== 'undefined') {
   // Hook into Next.js error overlay system
   // This will capture errors from webpack HMR updates
   const originalErrorOverlay = window.__NEXT_ERROR_OVERLAY__;
-  
+
   if (originalErrorOverlay) {
     const originalOnBuildError = originalErrorOverlay.onBuildError;
-    
+
     // Patch the Next.js build error handler
     originalErrorOverlay.onBuildError = (error: any) => {
       // First, call the original handler to maintain default behavior
       if (originalOnBuildError) {
         originalOnBuildError(error);
       }
-      
+
       // Then, send error to parent window
       try {
         const errorMessage = error.message || 'Build error';
         const errorObj = new Error(errorMessage);
-        
+
         // Preserve original stack if available
         if (error.stack) {
           errorObj.stack = error.stack;
         }
-        
+
         // Extract additional details from the error object
         const details = {
           moduleError: error.moduleName || error.moduleIdentifier || null,
@@ -410,12 +415,12 @@ if (typeof window !== 'undefined') {
           // Preserve raw error for better parsing
           rawError: error
         };
-        
+
         console.warn('Build error intercepted by detector:', details);
-        
+
         // Send to parent window
         sendErrorToParent(errorObj, details);
-        
+
         // Also dispatch event for GlobalErrorHandler
         const event = new CustomEvent('webpack-build-error', {
           detail: {
@@ -430,31 +435,31 @@ if (typeof window !== 'undefined') {
       }
     };
   }
-  
+
   // Also listen for webpack chunk loading errors
   window.addEventListener('error', (event) => {
     const error = event.error || event;
-    
+
     // Check if this is a chunk loading error from webpack
-    if (error && 
-        typeof error.message === 'string' && 
-        (error.message.includes('Loading chunk') || 
-         error.message.includes('Loading CSS chunk') ||
-         error.message.includes('webpack') ||
-         error.message.includes('Module build failed'))) {
-      
+    if (error &&
+      typeof error.message === 'string' &&
+      (error.message.includes('Loading chunk') ||
+        error.message.includes('Loading CSS chunk') ||
+        error.message.includes('webpack') ||
+        error.message.includes('Module build failed'))) {
+
       console.warn('Webpack chunk loading error detected:', error);
-      
+
       try {
-        const errorObj = error instanceof Error 
-          ? error 
+        const errorObj = error instanceof Error
+          ? error
           : new Error(error.message || 'Chunk loading error');
-        
+
         // Preserve original stack if available
         if (error.stack && !errorObj.stack) {
           errorObj.stack = error.stack;
         }
-        
+
         const details: Record<string, any> = {
           isChunkLoadError: true,
           buildErrorType: "chunk-loading",
@@ -468,24 +473,24 @@ if (typeof window !== 'undefined') {
             message: event.message
           }
         };
-        
+
         // If the event has filename/line info, use it
         if (event.filename && !details.source) {
           details.source = event.filename;
           details.file = event.filename;
         }
-        
+
         if (event.lineno) {
           details.line = event.lineno;
         }
-        
+
         if (event.colno) {
           details.column = event.colno;
         }
-        
+
         // Send to parent window directly
         sendErrorToParent(errorObj, details);
-        
+
         // Also dispatch event for GlobalErrorHandler
         const errorEvent = new CustomEvent('webpack-build-error', {
           detail: {
@@ -501,21 +506,56 @@ if (typeof window !== 'undefined') {
       }
     }
   }, true); // Use capture phase to catch errors before they're handled elsewhere
-  
+
+  // Listen for raw webpack errors via console messages
+  const originalConsoleError = console.error;
+  console.error = function (...args) {
+    // Call the original first
+    originalConsoleError.apply(console, args);
+
+    // Try to detect build errors in console output
+    try {
+      const errorString = args.join(' ');
+
+      // Check if this looks like a build error
+      const isBuildError =
+        errorString.includes('Failed to compile') ||
+        errorString.includes('Module build failed') ||
+        errorString.includes('Module not found') ||
+        errorString.includes('Compilation error');
+
+      if (isBuildError) {
+        console.log('[DEBUG] Detected build error in console output');
+
+        // Try to create a proper error object
+        const errorObj = new Error(errorString);
+
+        // Send it to the parent
+        sendErrorToParent(errorObj, {
+          origin: 'console-error',
+          buildErrorType: 'webpack'
+        });
+      }
+    } catch (e) {
+      // Don't break if our detection fails
+      console.warn('Error processing console output:', e);
+    }
+  };
+
   // Set up global error listener function for webpack
   // This can be called directly from webpack error hooks
-  window.__NEXT_BUILD_ERROR_LISTENER__ = function(errorData: any) {
+  window.__NEXT_BUILD_ERROR_LISTENER__ = function (errorData: any) {
     try {
       console.warn('Build error reported via global listener:', errorData);
-      
+
       const errorMessage = errorData.message || 'Build error';
       const errorObj = new Error(errorMessage);
-      
+
       // Preserve original stack if available
       if (errorData.stack) {
         errorObj.stack = errorData.stack;
       }
-      
+
       const details = {
         buildErrorType: "webpack-listener",
         data: errorData,
@@ -527,13 +567,13 @@ if (typeof window !== 'undefined') {
         // Keep raw data for parsing
         rawError: errorData
       };
-      
+
       // Send to parent window directly
       sendErrorToParent(errorObj, details);
-      
+
       // Also dispatch for GlobalErrorHandler
       const event = new CustomEvent('webpack-build-error', {
-        detail: { 
+        detail: {
           error: errorObj,
           ...details,
           sentToParent: true // Mark as already sent to parent
