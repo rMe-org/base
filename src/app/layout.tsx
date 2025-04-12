@@ -9,6 +9,7 @@ import {
   DOMInspector,
   Branding,
 } from "@/utis/creatr.scripts";
+import { GlobalErrorHandler } from "@/utis/global-error-handler";
 
 // Create a proper React component wrapper
 const ErrorBoundaryWrapper: React.FC<{ children: React.ReactNode }> = (
@@ -64,6 +65,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         {" "}
+        <GlobalErrorHandler />
         <DOMInspector>
           <ErrorBoundaryWrapper>
             {children}
