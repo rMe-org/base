@@ -8,8 +8,8 @@ import {
   ErrorBoundaryClient,
   DOMInspector,
   Branding,
-} from "@/utis/creatr.scripts";
-import { GlobalErrorHandler } from "@/utis/global-error-handler";
+} from "@/utils/creatr.scripts";
+import { GlobalErrorHandler } from "@/utils/global-error-handler";
 
 // Create a proper React component wrapper
 const ErrorBoundaryWrapper: React.FC<{ children: React.ReactNode }> = (
