@@ -4,9 +4,6 @@ import { useEffect } from "react";
 import ErrorStackParser from "error-stack-parser";
 import { initBuildErrorDetector } from "./build-error-detector";
 
-// Add console log to verify the module is loaded
-console.log('★★★ GLOBAL ERROR HANDLER MODULE LOADED ★★★');
-
 // Define the interface for error location info, matching the one in creatr.scripts.tsx
 interface ErrorLocationInfo {
   functionName: string;
@@ -128,10 +125,8 @@ function isBuildError(error: Error | any): boolean {
 }
 
 export function GlobalErrorHandler(): JSX.Element {
-  console.log('★★★ GLOBAL ERROR HANDLER COMPONENT MOUNTED ★★★');
 
   useEffect(() => {
-    console.log('★★★ GLOBAL ERROR HANDLER EFFECT RUNNING ★★★');
     // Initialize the build error detector
     initBuildErrorDetector();
 

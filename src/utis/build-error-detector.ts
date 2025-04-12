@@ -8,9 +8,6 @@
 
 import ErrorStackParser from "error-stack-parser";
 
-// Log immediately when this module is loaded
-console.log('★★★ BUILD ERROR DETECTOR LOADED ★★★');
-
 // Add TypeScript declarations for Next.js error overlay properties
 declare global {
   interface Window {
@@ -492,7 +489,6 @@ if (typeof window !== 'undefined') {
         errorString.includes('ErrorBoundaryClient');
 
       if (isBuildError) {
-        console.log('[DEBUG] Detected build error in console output');
 
         // Try to create a proper error object
         const errorObj = new Error(errorString);
