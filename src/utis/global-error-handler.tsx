@@ -145,7 +145,6 @@ export function GlobalErrorHandler(): JSX.Element {
       // Check if it's a build error
       const isBuildErrorDetected = isBuildError(event.reason);
 
-      // Remove NextAuth error detection
 
       if (isBuildErrorDetected) {
         console.warn("Build error intercepted:", {
@@ -203,10 +202,6 @@ export function GlobalErrorHandler(): JSX.Element {
 
         return;
       }
-
-      // Remove NextAuth error handling
-
-      // For other errors, let them propagate to the regular error boundary
     };
 
     // Intercept console.error to catch build errors that are directly logged
@@ -298,8 +293,8 @@ export function GlobalErrorHandler(): JSX.Element {
           // Build error - direct from console.error
           console.log("[SENDING TO PARENT] Build error from console.error:", {
             source,
-            message: errorString.substring(0, 200) + (errorString.length > 200 ? '...' : ''),
-            stack: errorObj.stack ? (errorObj.stack.substring(0, 200) + '...') : '(no stack)',
+            message: errorString,
+            stack: errorObj.stack,
             timestamp: new Date().toISOString(),
             type: "build error",
             origin: "console error - direct"
@@ -343,8 +338,8 @@ export function GlobalErrorHandler(): JSX.Element {
               // Parsed build error from console.error
               console.log("[SENDING TO PARENT] Parsed build error from console.error:", {
                 source,
-                message: errorString.substring(0, 200) + (errorString.length > 200 ? '...' : ''),
-                stack: typeof locationInfo.stack === 'string' ? locationInfo.stack.substring(0, 200) + '...' : '(stack object)',
+                message: errorString,
+                stack: locationInfo.stack,
                 line: locationInfo.line || line,
                 column: locationInfo.column || column,
                 timestamp: new Date().toISOString(),

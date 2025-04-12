@@ -31,13 +31,6 @@ interface StackFrame {
 
 // Function to parse detailed build error information
 function parseDetailedBuildError(error: Error | any): Record<string, any> {
-  // Debug the incoming error
-  console.log("[DEBUG] Parsing error:", {
-    errorType: error instanceof Error ? 'Error object' : typeof error,
-    message: error?.message ? error.message.substring(0, 200) + '...' : 'No message',
-    hasStack: !!error?.stack,
-    stack: error?.stack ? error.stack.substring(0, 200) + '...' : 'No stack'
-  });
 
   const details: Record<string, any> = {
     source: "webpack-build",
@@ -53,7 +46,6 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
   const errorMessage = error.message || (typeof error === 'string' ? error : '');
 
   // Log the exact error message for debugging
-  console.log("[DEBUG] Raw error message:", errorMessage);
 
   // Next.js-specific error pattern with file, line, and column in brackets
   // Matches formats like "╭─[/path/to/file.tsx:65:1]"
@@ -61,7 +53,6 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
   const nextjsMatch = errorMessage.match(nextjsErrorPattern);
 
   if (nextjsMatch) {
-    console.log("[DEBUG] Found Next.js error pattern match");
     details.file = nextjsMatch[1];
     details.line = parseInt(nextjsMatch[2], 10);
     details.column = parseInt(nextjsMatch[3], 10);
@@ -75,7 +66,6 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
     const fileLineColMatch = errorMessage.match(fileLineColPattern);
 
     if (fileLineColMatch) {
-      console.log("[DEBUG] Found standard file:line:column pattern match");
       details.file = fileLineColMatch[1];
       details.line = parseInt(fileLineColMatch[2], 10);
       details.column = parseInt(fileLineColMatch[3], 10);
@@ -89,7 +79,6 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
     const fileMatch = errorMessage.match(filePattern);
 
     if (fileMatch) {
-      console.log("[DEBUG] Found File: pattern match");
       details.file = fileMatch[1];
       details.source = details.file;
     }
@@ -101,7 +90,6 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
   const nextjsErrorMatch = errorMessage.match(nextjsErrorDescriptionPattern);
 
   if (nextjsErrorMatch) {
-    console.log("[DEBUG] Found Next.js error description match");
     details.parsedMessage = nextjsErrorMatch[1].trim();
   } else {
     // Standard error message format
@@ -109,7 +97,6 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
     const errorMatch = errorMessage.match(errorPattern);
 
     if (errorMatch) {
-      console.log("[DEBUG] Found standard error description match");
       details.parsedMessage = errorMatch[1].trim();
     }
   }
@@ -119,13 +106,11 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
   const moduleBuildMatch = errorMessage.match(moduleBuildErrorPattern);
 
   if (moduleBuildMatch) {
-    console.log("[DEBUG] Found module build error match");
     const moduleBuildError = moduleBuildMatch[1].trim();
 
     // Try to extract file info from the module build error
     const moduleFileMatch = moduleBuildError.match(nextjsErrorPattern);
     if (moduleFileMatch && !details.file) {
-      console.log("[DEBUG] Found file info in module build error");
       details.file = moduleFileMatch[1];
       details.line = parseInt(moduleFileMatch[2], 10);
       details.column = parseInt(moduleFileMatch[3], 10);
@@ -152,16 +137,13 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
 
   // Handle raw data from the error-overlay component
   if (error.rawError && error.rawError.loc) {
-    console.log("[DEBUG] Found raw error data with location info");
     if (!details.file && error.rawError.moduleId) {
-      console.log("[DEBUG] Using moduleId from raw error");
       details.file = error.rawError.moduleId;
       details.source = details.file;
     }
 
     // Next.js error-overlay often has precise location info
     if (error.rawError.loc) {
-      console.log("[DEBUG] Using loc from raw error");
       details.line = error.rawError.loc.line || details.line;
       details.column = error.rawError.loc.column || details.column;
     }
@@ -169,20 +151,16 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
 
   // Extract information from the raw event if available
   if (error.rawEvent) {
-    console.log("[DEBUG] Found raw event data");
     if (!details.file && error.rawEvent.filename) {
-      console.log("[DEBUG] Using filename from raw event");
       details.file = error.rawEvent.filename;
       details.source = details.file;
     }
 
     if (error.rawEvent.lineno && !details.line) {
-      console.log("[DEBUG] Using lineno from raw event");
       details.line = error.rawEvent.lineno;
     }
 
     if (error.rawEvent.colno && !details.column) {
-      console.log("[DEBUG] Using colno from raw event");
       details.column = error.rawEvent.colno;
     }
   }
@@ -191,9 +169,7 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
   let stackParsed = false;
   try {
     if (error instanceof Error || (error && error.stack)) {
-      console.log("[DEBUG] Parsing error stack with ErrorStackParser");
       const stackFrames = ErrorStackParser.parse(error);
-      console.log("[DEBUG] Stack frames:", stackFrames);
 
       // Create improved stack with cleaner file paths
       const improvedStack = stackFrames.map(frame => ({
@@ -205,10 +181,6 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
         functionName: frame.functionName || "",
       }));
 
-      console.log("[DEBUG] Extracted stack frames:",
-        improvedStack.length > 0
-          ? `${improvedStack.length} frames, first: ${JSON.stringify(improvedStack[0])}`
-          : "none");
 
       // Filter out frames from node_modules and internal webpack files
       const relevantFrames = improvedStack.filter(frame => {
@@ -220,16 +192,12 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
           !fileName.includes('error-detector');
       });
 
-      console.log("[DEBUG] Relevant frames after filtering:",
-        relevantFrames.length > 0
-          ? `${relevantFrames.length} frames, first: ${JSON.stringify(relevantFrames[0])}`
-          : "none");
+
 
       // Only use stack info if we don't have better file info already
       if (relevantFrames.length > 0 && !details.file) {
         stackParsed = true;
         const firstFrame = relevantFrames[0];
-        console.log("[DEBUG] Using info from first relevant stack frame");
         details.file = firstFrame.fileName;
         details.source = firstFrame.fileName;
         details.line = firstFrame.lineNumber;
@@ -249,14 +217,12 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
     details.source.includes('webpack') ||
     details.source.includes('next/dist')
   ) && details.improvedStack && details.improvedStack.length > 0) {
-    console.log("[DEBUG] Trying to find better source in stack frames");
     // Look for a better source in the improved stack
     for (const frame of details.improvedStack) {
       if (frame.fileName &&
         !frame.fileName.includes('node_modules') &&
         !frame.fileName.includes('webpack') &&
         !frame.fileName.includes('next/dist')) {
-        console.log("[DEBUG] Found better source in stack:", frame.fileName);
         details.source = frame.fileName;
         details.file = frame.fileName;
         details.line = frame.lineNumber;
@@ -522,7 +488,8 @@ if (typeof window !== 'undefined') {
         errorString.includes('Failed to compile') ||
         errorString.includes('Module build failed') ||
         errorString.includes('Module not found') ||
-        errorString.includes('Compilation error');
+        errorString.includes('Compilation error') ||
+        errorString.includes('ErrorBoundaryClient');
 
       if (isBuildError) {
         console.log('[DEBUG] Detected build error in console output');
