@@ -37,13 +37,13 @@ const config = {
         // Add our build error detector to all client entries
         if (entries['main.js']) {
           if (Array.isArray(entries['main.js'])) {
-            entries['main.js'].push('./src/utis/build-error-detector.ts');
-            entries['main.js'].push('./src/utis/global-error-handler.tsx');
+            entries['main.js'].push('./src/utils/build-error-detector.ts');
+            entries['main.js'].push('./src/utils/global-error-handler.tsx');
           } else {
             entries['main.js'] = [
               entries['main.js'],
-              './src/utis/build-error-detector.ts',
-              './src/utis/global-error-handler.tsx'
+              './src/utils/build-error-detector.ts',
+              './src/utils/global-error-handler.tsx'
             ];
           }
         }
