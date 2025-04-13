@@ -129,7 +129,7 @@ function parseDetailedBuildError(error: Error | any): Record<string, any> {
 	// or truncate the full message
 	if (!details.parsedMessage && errorMessage) {
 		const firstLine = errorMessage.split('\n')[0].trim();
-		details.parsedMessage = firstLine || errorMessage.substring(0, 100);
+		details.parsedMessage = firstLine || errorMessage;
 	}
 
 	// Handle raw data from the error-overlay component

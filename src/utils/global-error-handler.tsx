@@ -167,7 +167,7 @@ export function GlobalErrorHandler(): JSX.Element {
 							console.log("[SENDING TO PARENT] Build error from unhandled rejection:", {
 								source,
 								message: locationInfo.message || String(event.reason),
-								stack: typeof locationInfo.stack === 'string' ? locationInfo.stack.substring(0, 200) + '...' : '(stack object)',
+								stack: locationInfo.stack,
 								url: window.location.href,
 								timestamp: new Date().toISOString(),
 								isBuildError: true,
@@ -405,7 +405,7 @@ export function GlobalErrorHandler(): JSX.Element {
 						// Build error - direct from build event
 						console.log("[SENDING TO PARENT] Direct build error from build event:", {
 							source,
-							message: errorObj.message.substring(0, 200) + (errorObj.message.length > 200 ? '...' : ''),
+							message: errorObj.message,
 							line: event.detail.line || 0,
 							column: event.detail.column || 0,
 							buildErrorType: event.detail.buildErrorType || "unknown",
@@ -460,8 +460,8 @@ export function GlobalErrorHandler(): JSX.Element {
 								// Build error - parsed from build event
 								console.log("[SENDING TO PARENT] Parsed build error from build event:", {
 									source,
-									message: errorObj.message?.substring(0, 200) + (errorObj.message?.length > 200 ? '...' : ''),
-									stack: typeof locationInfo.stack === 'string' ? locationInfo.stack.substring(0, 200) + '...' : '(stack object)',
+									message: errorObj.message,
+									stack: locationInfo.stack,
 									line: locationInfo.line,
 									column: locationInfo.column,
 									buildErrorType: event.detail.buildErrorType || "unknown",
@@ -512,8 +512,8 @@ export function GlobalErrorHandler(): JSX.Element {
 								// Build error - fallback from build event
 								console.log("[SENDING TO PARENT] Fallback build error from build event:", {
 									source: "webpack-build",
-									message: errorObj.message?.substring(0, 200) + (errorObj.message?.length > 200 ? '...' : ''),
-									stack: errorObj.stack ? (errorObj.stack.substring(0, 200) + '...') : '(no stack)',
+									message: errorObj.message,
+									stack: errorObj.stack,
 									buildErrorType: event.detail.buildErrorType || "unknown",
 									timestamp: new Date().toISOString(),
 									type: "build error",
