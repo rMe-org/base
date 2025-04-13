@@ -18,7 +18,7 @@ const config = {
     ignoreBuildErrors: true,
   },
   watchOptions: {
-    pollIntervalMs: 1000,
+    pollIntervalMs: 5000,
   },
   webpack: (config, { isServer }) => {
     config.stats = "verbose";

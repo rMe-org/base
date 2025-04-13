@@ -499,7 +499,6 @@ export const AnalyticsTracker = ({
  ******************/
 export function Branding() {
 	const [isVisible, setIsVisible] = useState(true);
-
 	useEffect(() => {
 		// Handle incoming messages
 		const handleMessage = (event: MessageEvent) => {
@@ -507,27 +506,38 @@ export function Branding() {
 				setIsVisible(event.data.visible);
 			}
 		};
-
 		// Check if running in iframe
 		const isInIframe = window !== window.parent;
 		if (isInIframe) {
 			setIsVisible(false);
 		}
-
 		// Add message listener
 		window.addEventListener("message", handleMessage);
-
 		// Cleanup
 		return () => window.removeEventListener("message", handleMessage);
 	}, []);
-
+	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+		// Get current URL search parameters
+		const currentUrlParams = new URLSearchParams(window.location.search);
+		// Get the base URL from the link's href
+		const linkUrl = new URL(e.currentTarget.href);
+		// Append all current parameters to the link URL
+		currentUrlParams.forEach((value, key) => {
+			// Only add the parameter if it doesn't already exist in the target URL
+			if (!linkUrl.searchParams.has(key)) {
+				linkUrl.searchParams.append(key, value);
+			}
+		});
+		// Update the href attribute with the new URL including parameters
+		e.currentTarget.href = linkUrl.toString();
+	};
 	if (!isVisible) return null;
-
 	return (
 		<a
 			href="https://getcreatr.com"
 			target="_blank"
 			rel="noopener noreferrer"
+			onClick={handleClick}
 			className="group fixed bottom-4 right-4 z-50 flex items-center rounded-md bg-black/90 px-2.5 py-1.5 font-sans text-xs text-white shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out hover:scale-105 hover:bg-black hover:shadow-xl"
 		>
 			<span className="flex items-center gap-1">
@@ -547,7 +557,6 @@ export function Branding() {
 					/>
 				</svg>
 			</span>
-
 			<button
 				onClick={(e) => {
 					e.preventDefault();
