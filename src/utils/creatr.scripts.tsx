@@ -516,28 +516,14 @@ export function Branding() {
 		// Cleanup
 		return () => window.removeEventListener("message", handleMessage);
 	}, []);
-	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-		// Get current URL search parameters
-		const currentUrlParams = new URLSearchParams(window.location.search);
-		// Get the base URL from the link's href
-		const linkUrl = new URL(e.currentTarget.href);
-		// Append all current parameters to the link URL
-		currentUrlParams.forEach((value, key) => {
-			// Only add the parameter if it doesn't already exist in the target URL
-			if (!linkUrl.searchParams.has(key)) {
-				linkUrl.searchParams.append(key, value);
-			}
-		});
-		// Update the href attribute with the new URL including parameters
-		e.currentTarget.href = linkUrl.toString();
-	};
+
 	if (!isVisible) return null;
+
 	return (
 		<a
 			href="https://getcreatr.com"
 			target="_blank"
 			rel="noopener noreferrer"
-			onClick={handleClick}
 			className="group fixed bottom-4 right-4 z-50 flex items-center rounded-md bg-black/90 px-2.5 py-1.5 font-sans text-xs text-white shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out hover:scale-105 hover:bg-black hover:shadow-xl"
 		>
 			<span className="flex items-center gap-1">
@@ -557,6 +543,7 @@ export function Branding() {
 					/>
 				</svg>
 			</span>
+
 			<button
 				onClick={(e) => {
 					e.preventDefault();
@@ -805,7 +792,146 @@ export const DOMInspector: React.FC<PropsWithChildren<DOMInspectorProps>> = ({
 	 */
 	useEffect(() => {
 		const handleMessage = (event: InspectorEvent) => {
-			const { type, enabled } = event.data;
+			const { type, enabled, targetId } = event.data;
+			console.log("BROOO", type)
+			function isTextOnly(el) {
+				return el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE;
+			}
+
+			// if (isInspectorActive) {
+			if (type === "GET_ELEMENT_STYLES") {
+				console.log(containerRef);
+				const targetElement = document.querySelector(`[data-unique-id="${targetId}"]`);
+				if (targetElement) {
+					const computedStyle = window.getComputedStyle(targetElement);
+
+					// Extract the requested style properties
+					const computedStyles = {
+						// Padding
+						paddingTop: computedStyle.paddingTop,
+						paddingRight: computedStyle.paddingRight,
+						paddingBottom: computedStyle.paddingBottom,
+						paddingLeft: computedStyle.paddingLeft,
+
+						// Margin
+						margin: computedStyle.margin,
+						marginTop: computedStyle.marginTop,
+						marginRight: computedStyle.marginRight,
+						marginBottom: computedStyle.marginBottom,
+						marginLeft: computedStyle.marginLeft,
+
+						// Dimensions
+						width: computedStyle.width,
+						height: computedStyle.height,
+
+						// Colors and appearance
+						backgroundColor: computedStyle.backgroundColor,
+						color: computedStyle.color,
+						borderRadius: computedStyle.borderRadius,
+
+						// Text properties
+						fontSize: computedStyle.fontSize,
+						fontWeight: computedStyle.fontWeight
+					};
+
+					// Get text content
+					const textContent = containerRef.current.textContent;
+
+					window.parent.postMessage({
+						type: 'ELEMENT_STYLES_RETRIEVED',
+						targetId: targetId,
+						metadata: {
+							computedStyles: computedStyles,
+							tailwindClasses: containerRef.current.className.split(" ")
+						}
+					}, '*');
+				}
+
+			}
+
+			if (type === "GET_ELEMENT_TEXT") {
+				console.log("Come here");
+				const targetElement = document.querySelector(`[data-unique-id="${targetId}"]`);
+
+				console.log("isTextOnly", targetElement, isTextOnly(targetElement));
+
+				console.log("textContent sent", targetElement.textContent)
+				window.parent.postMessage({
+					type: 'ELEMENT_TEXT_RETRIEVED',
+					targetId: targetId,
+					metadata: {
+						textContent: targetElement.textContent ?? null,
+						targetId: targetId
+					}
+				}, '*');
+			}
+
+			if (type === "UPDATE_ELEMENT_STYLES") {
+				console.log("UPDATE_ELEMENT_STYLES FOUND", event.data.targetId);
+
+				// Find ALL target elements with the matching data-unique-id
+				const targetElements = document.querySelectorAll(`[data-unique-id="${targetId}"]`);
+				console.log("Found target elements:", targetElements.length);
+
+				if (targetElements.length > 0) {
+					const keys = Object.keys(event.data.styles);
+					console.log("Applying styles:", keys);
+
+					// Loop through all matching elements and apply styles to each one
+					targetElements.forEach(element => {
+						for (const key of keys) {
+							element.style[key] = event.data.styles[key];
+						}
+					});
+				} else {
+					console.error(`No elements with data-unique-id="${targetId}" found`);
+				}
+			}
+
+			if (type === "UPDATE_ELEMENT_TEXT") {
+				console.log("UPDATE_ELEMENT_TEXT FOUND", event.data.targetId, event.data.text);
+
+				// Find ALL target elements with the matching data-unique-id
+				const targetElements = document.querySelectorAll(`[data-unique-id="${targetId}"]`);
+				console.log("Found target elements for text update:", targetElements.length);
+
+				if (targetElements.length > 0) {
+					// Loop through all matching elements and update their text content
+					targetElements.forEach(element => {
+						element.textContent = event.data.text;
+					});
+				} else {
+					console.error(`No elements with data-unique-id="${targetId}" found for text update`);
+				}
+			}
+
+
+			if (type === "DELETE_ELEMENT") {
+				const targetElements = document.querySelectorAll(`[data-unique-id="${targetId}"]`);
+				console.log("Found target elements for delete element:", targetElements.length);
+
+				if (targetElements.length > 0) {
+					// Loop through all matching elements and replace with React fragments
+					targetElements.forEach(element => {
+						// Since this appears to be running in the browser DOM (not React),
+						// we need to handle this differently
+
+						// Option 1: Remove the element completely
+						element.parentNode.removeChild(element);
+
+						// Option 2: Keep the children but remove the container
+						// const parent = element.parentNode;
+						// while (element.firstChild) {
+						//     parent.insertBefore(element.firstChild, element);
+						// }
+						// parent.removeChild(element);
+					});
+				} else {
+					console.error(`No elements with data-unique-id="${targetId}" found for deletion`);
+				}
+			}
+			// }
+
 			if (type === "TOGGLE_INSPECTOR") {
 				setIsInspectorActive(!!enabled);
 				if (enabled) setIsImageInspectorActive(false);
