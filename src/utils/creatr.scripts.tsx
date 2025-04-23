@@ -840,6 +840,11 @@ export const DOMInspector: React.FC<PropsWithChildren<DOMInspectorProps>> = ({
 						color: computedStyle.color,
 						borderRadius: computedStyle.borderRadius,
 
+						// Border properties
+						borderWidth: computedStyle.borderWidth,
+						borderStyle: computedStyle.borderStyle,
+						borderColor: computedStyle.borderColor,
+
 						// Text properties
 						fontSize: computedStyle.fontSize,
 						fontWeight: computedStyle.fontWeight
