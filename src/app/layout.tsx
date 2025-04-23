@@ -1,24 +1,8 @@
-import React from "react";
 import "@/styles/globals.css";
+import React from "react";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import {
-  AnalyticsTracker,
-  ErrorBoundaryClient,
-  DOMInspector,
-  Branding,
-} from "@/utils/creatr.scripts";
-import { GlobalErrorHandler } from "@/utils/global-error-handler";
-
-// Create a proper React component wrapper
-const ErrorBoundaryWrapper: React.FC<{ children: React.ReactNode }> = (
-  props,
-) => {
-  const ErrorBoundaryComponent =
-    ErrorBoundaryClient as unknown as React.ComponentType<any>;
-  return <ErrorBoundaryComponent {...props} />;
-};
 
 export const viewport = {
   width: "device-width",
@@ -63,17 +47,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body>
-        {" "}
-        <GlobalErrorHandler />
-        <DOMInspector>
-          <ErrorBoundaryWrapper>
-            {children}
-            <Branding />
-          </ErrorBoundaryWrapper>
-          <AnalyticsTracker siteKey="${siteKey}" />
-        </DOMInspector>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
