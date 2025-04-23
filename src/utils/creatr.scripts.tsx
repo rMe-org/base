@@ -793,15 +793,28 @@ export const DOMInspector: React.FC<PropsWithChildren<DOMInspectorProps>> = ({
 	useEffect(() => {
 		const handleMessage = (event: InspectorEvent) => {
 			const { type, enabled, targetId } = event.data;
+
 			function isTextOnly(el) {
 				return el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE;
 			}
 
-			// if (isInspectorActive) {
 			if (type === "GET_ELEMENT_STYLES") {
-				const targetElement = document.querySelector(`[data-unique-id="${targetId}"]`);
-				if (targetElement) {
+				const targetElements = document.querySelectorAll(`[data-unique-id="${targetId}"]`);
+
+				if (targetElements.length > 0) {
+					// Get the first element for styles
+					const targetElement = targetElements[0];
 					const computedStyle = window.getComputedStyle(targetElement);
+
+					// Check if element has direct text content
+					const hasDirectText = Array.from(targetElement.childNodes).some(node =>
+						node.nodeType === Node.TEXT_NODE && node.textContent.trim().length > 0
+					);
+
+					// Alternative approach using the isTextOnly function
+					// The isTextOnly function checks if element has exactly one child 
+					// and that child is a text node
+					const isElementTextOnly = isTextOnly(targetElement);
 
 					// Extract the requested style properties
 					const computedStyles = {
@@ -833,20 +846,22 @@ export const DOMInspector: React.FC<PropsWithChildren<DOMInspectorProps>> = ({
 					};
 
 					// Get text content
-					const textContent = containerRef.current.textContent;
+					const textContent = targetElement.textContent;
 
 					window.parent.postMessage({
 						type: 'ELEMENT_STYLES_RETRIEVED',
 						targetId: targetId,
 						metadata: {
 							computedStyles: computedStyles,
-							tailwindClasses: containerRef.current.className.split(" ")
+							tailwindClasses: targetElement.className.split(" "),
+							isDynamicallyRendered: targetElements.length > 1,
+							duplicateCount: targetElements.length,
+							hasDirectText: hasDirectText,
+							isTextOnly: isElementTextOnly
 						}
 					}, '*');
 				}
-
 			}
-
 			if (type === "GET_ELEMENT_TEXT") {
 				const targetElement = document.querySelector(`[data-unique-id="${targetId}"]`);
 
