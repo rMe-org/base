@@ -793,14 +793,12 @@ export const DOMInspector: React.FC<PropsWithChildren<DOMInspectorProps>> = ({
 	useEffect(() => {
 		const handleMessage = (event: InspectorEvent) => {
 			const { type, enabled, targetId } = event.data;
-			console.log("BROOO", type)
 			function isTextOnly(el) {
 				return el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE;
 			}
 
 			// if (isInspectorActive) {
 			if (type === "GET_ELEMENT_STYLES") {
-				console.log(containerRef);
 				const targetElement = document.querySelector(`[data-unique-id="${targetId}"]`);
 				if (targetElement) {
 					const computedStyle = window.getComputedStyle(targetElement);
@@ -850,12 +848,8 @@ export const DOMInspector: React.FC<PropsWithChildren<DOMInspectorProps>> = ({
 			}
 
 			if (type === "GET_ELEMENT_TEXT") {
-				console.log("Come here");
 				const targetElement = document.querySelector(`[data-unique-id="${targetId}"]`);
 
-				console.log("isTextOnly", targetElement, isTextOnly(targetElement));
-
-				console.log("textContent sent", targetElement.textContent)
 				window.parent.postMessage({
 					type: 'ELEMENT_TEXT_RETRIEVED',
 					targetId: targetId,
@@ -867,15 +861,12 @@ export const DOMInspector: React.FC<PropsWithChildren<DOMInspectorProps>> = ({
 			}
 
 			if (type === "UPDATE_ELEMENT_STYLES") {
-				console.log("UPDATE_ELEMENT_STYLES FOUND", event.data.targetId);
 
 				// Find ALL target elements with the matching data-unique-id
 				const targetElements = document.querySelectorAll(`[data-unique-id="${targetId}"]`);
-				console.log("Found target elements:", targetElements.length);
 
 				if (targetElements.length > 0) {
 					const keys = Object.keys(event.data.styles);
-					console.log("Applying styles:", keys);
 
 					// Loop through all matching elements and apply styles to each one
 					targetElements.forEach(element => {
@@ -889,11 +880,9 @@ export const DOMInspector: React.FC<PropsWithChildren<DOMInspectorProps>> = ({
 			}
 
 			if (type === "UPDATE_ELEMENT_TEXT") {
-				console.log("UPDATE_ELEMENT_TEXT FOUND", event.data.targetId, event.data.text);
 
 				// Find ALL target elements with the matching data-unique-id
 				const targetElements = document.querySelectorAll(`[data-unique-id="${targetId}"]`);
-				console.log("Found target elements for text update:", targetElements.length);
 
 				if (targetElements.length > 0) {
 					// Loop through all matching elements and update their text content
@@ -908,7 +897,6 @@ export const DOMInspector: React.FC<PropsWithChildren<DOMInspectorProps>> = ({
 
 			if (type === "DELETE_ELEMENT") {
 				const targetElements = document.querySelectorAll(`[data-unique-id="${targetId}"]`);
-				console.log("Found target elements for delete element:", targetElements.length);
 
 				if (targetElements.length > 0) {
 					// Loop through all matching elements and replace with React fragments
