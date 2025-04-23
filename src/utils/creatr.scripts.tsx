@@ -1,8 +1,8 @@
 //@ts-nocheck
 "use client";
 
-import React, { useEffect, useState, useRef, PropsWithChildren } from "react";
 import ErrorStackParser from "error-stack-parser";
+import React, { PropsWithChildren, useEffect, useRef, useState } from "react";
 
 // Types and Interfaces
 interface ElementMetadata {
@@ -240,8 +240,12 @@ export class ErrorBoundaryClient extends React.Component<
 		}
 	}
 
-	render() {
-		return this.props.children;
+		render() {
+    // When an error occurs, render a fallback UI instead of the children
+    if (this.state.hasError) {
+      return null;
+    }
+    return this.props.children;
 	}
 }
 
