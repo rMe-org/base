@@ -9,7 +9,8 @@ const config = {
     "plugins": [
         "@typescript-eslint",
         "react",
-        "react-hooks"
+        "react-hooks",
+        "creatr"
     ],
     "globals": {
         "React": "readonly"
@@ -37,6 +38,7 @@ const config = {
         "plugin:import/errors",
         "plugin:import/warnings",
         "plugin:import/typescript",
+        "plugin:creatr/recommended"
     ],
     "rules": {
         "react/react-in-jsx-scope": "off",
@@ -59,6 +61,8 @@ const config = {
         "react/no-unknown-property": "off",
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-empty-object-type": "off",
+        'import/default': 'error',
+        'import/namespace': 'error',
     },
     "env": {
         "browser": true,
