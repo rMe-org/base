@@ -23,20 +23,14 @@ const config = {
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
+        // File system - never needed in browser
+        fs: false,
         net: false,
         tls: false,
-        fs: false,
-        dns: false,
-        perf_hooks: false,
+
+        // Definitely not needed in browser
         child_process: false,
-        os: false,
-        path: false,
-        http: false,
-        https: false,
-        zlib: false,
-        util: false,
-        url: false,
-        querystring: false,
+        dns: false,
       };
     }
     return config;
