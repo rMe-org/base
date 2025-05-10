@@ -17,26 +17,28 @@ const config = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
     config.stats = "verbose";
     // Enhanced node polyfills for postgres and other modules
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      net: false,
-      tls: false,
-      fs: false,
-      dns: false,
-      perf_hooks: false,
-      child_process: false,
-      os: false,
-      path: false,
-      http: false,
-      https: false,
-      zlib: false,
-      util: false,
-      url: false,
-      querystring: false,
-    };
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        net: false,
+        tls: false,
+        fs: false,
+        dns: false,
+        perf_hooks: false,
+        child_process: false,
+        os: false,
+        path: false,
+        http: false,
+        https: false,
+        zlib: false,
+        util: false,
+        url: false,
+        querystring: false,
+      };
+    }
     return config;
   },
 };
