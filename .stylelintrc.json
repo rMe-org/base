@@ -35,13 +35,17 @@
         "color-function-notation": null,
         "alpha-value-notation": null,
         "declaration-empty-line-before": null,
-        "font-family-name-quotes": null
+        "font-family-name-quotes": null,
+        "length-zero-no-unit": null,
+        "no-invalid-position-at-import-rule": null
     },
-    "overrides": [{
-        "files": [
-            "**/*.css",
-            "**/*.scss"
-        ],
-        "customSyntax": "postcss-syntax"
-    }]
+    "overrides": [
+        {
+            "files": [
+                "**/*.css",
+                "**/*.scss"
+            ],
+            "customSyntax": "postcss-syntax"
+        }
+    ]
 }
