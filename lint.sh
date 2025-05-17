@@ -66,7 +66,7 @@ fi
 # Run TypeScript check if there are any TS files
 if [ ${#ts_files[@]} -gt 0 ]; then
   # Run tsc with project flag to use tsconfig.json
-  output=$(NPM_CONFIG_UPDATE_NOTIFIER=false npx --no-update-notifier --no-fund --no-audit tsc --noEmit --project tsconfig.json 2>&1)
+  output=$(NPM_CONFIG_UPDATE_NOTIFIER=false npx tsc --noEmit --project tsconfig.json 2>&1)
   exit_status=$?
   if [ $exit_status -ne 0 ]; then
     ts_output="Detected TypeScript errors:
@@ -81,7 +81,7 @@ fi
 if [ ${#js_files[@]} -gt 0 ] || [ ${#ts_files[@]} -gt 0 ]; then
   all_js_files=("${js_files[@]}" "${ts_files[@]}")
   # Properly handle files with special characters by using -- to separate options from filenames
-  eslint_output=$(NPM_CONFIG_UPDATE_NOTIFIER=false npx --no-update-notifier --no-fund --no-audit eslint --format unix -- "${all_js_files[@]}" 2>&1)
+  eslint_output=$(NPM_CONFIG_UPDATE_NOTIFIER=false npx eslint --format unix -- "${all_js_files[@]}" 2>&1)
   exit_status=$?
   if [ $exit_status -ne 0 ]; then
     eslint_error=$exit_status
@@ -93,7 +93,7 @@ fi
 # Run Stylelint on CSS files if there are any
 if [ ${#css_files[@]} -gt 0 ]; then
   # Properly handle files with special characters by using -- to separate options from filenames
-  stylelint_output=$(NPM_CONFIG_UPDATE_NOTIFIER=false npx --no-update-notifier --no-fund --no-audit stylelint -- "${css_files[@]}" 2>&1)
+  stylelint_output=$(NPM_CONFIG_UPDATE_NOTIFIER=false npx stylelint -- "${css_files[@]}" 2>&1)
   exit_status=$?
   if [ $exit_status -ne 0 ]; then
     stylelint_error=$exit_status
@@ -104,7 +104,7 @@ ${stylelint_output}"
   # Run Tailwind check
   if [ -n "${css_files[0]}" ]; then
     current_file="${css_files[0]}"
-    output=$(NPM_CONFIG_UPDATE_NOTIFIER=false npx --no-update-notifier --no-fund --no-audit tailwindcss -i "$current_file" 2>&1)
+    output=$(NPM_CONFIG_UPDATE_NOTIFIER=false npx tailwindcss -i "$current_file" 2>&1)
     exit_status=$?
     if [ $exit_status -ne 0 ]; then
       tailwind_error=$exit_status
