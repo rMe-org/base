@@ -1,3 +1,4 @@
+// @ts-ignore
 /** @type {import("next").NextConfig} */
 const config = {
   trailingSlash: true,
@@ -5,9 +6,9 @@ const config = {
     unoptimized: true,
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "*",
-        pathname: "**",
+        protocol: 'https',
+        hostname: '*',
+        pathname: '**',
       },
     ],
   },
@@ -27,6 +28,9 @@ const config = {
         fs: false,
         net: false,
         tls: false,
+        crypto: false,
+        stream: false,
+        'perf_hooks': false,
 
         // Definitely not needed in browser
         child_process: false,
