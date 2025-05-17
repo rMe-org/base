@@ -18,8 +18,10 @@ const config = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  productionBrowserSourceMaps: true,
   webpack: (config, { isServer }) => {
     config.stats = "verbose";
+    config.devtool = 'source-map'
     // Enhanced node polyfills for postgres and other modules
     if (!isServer) {
       config.resolve.fallback = {
@@ -38,6 +40,14 @@ const config = {
       };
     }
     return config;
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/_next/:path*.map',
+        destination: '/_next/:path*.map',
+      },
+    ];
   },
 };
 export default config;
