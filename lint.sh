@@ -16,8 +16,10 @@ for arg in "$@"; do
     css_files+=("$arg")
   elif [[ $arg == *.ts || $arg == *.tsx ]]; then
     ts_files+=("$arg")
-  else
+  elif [[ $arg == *.js || $arg == *.jsx ]]; then
     js_files+=("$arg")
+  else
+    continue
   fi
 done
 
