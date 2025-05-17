@@ -4,6 +4,8 @@ import React from "react";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
+import { DevtoolsProvider } from 'creatr-devtools'
+
 export const viewport = {
   width: "device-width",
   initialScale: 1,
@@ -47,7 +49,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body>{children}</body>
+      <DevtoolsProvider>
+        <body>{children}</body>
+      </DevtoolsProvider>
     </html>
   );
 }
