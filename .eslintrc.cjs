@@ -50,6 +50,7 @@ const config = {
             "error",
             { "ignore": ["^geist/"] } // Add specific packages to ignore
         ],
+        "import/no-named-as-default": "off",
         "react/prop-types": "off",
         "@next/next/no-img-element": "off",
         "import/named": "error",
