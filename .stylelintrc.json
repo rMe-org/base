@@ -8,6 +8,7 @@
             true,
             {
                 "ignoreAtRules": [
+                    "custom-variant",
                     "tailwind",
                     "apply",
                     "layer",
