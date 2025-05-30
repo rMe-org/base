@@ -1,10 +1,12 @@
 import "@/styles/globals.css";
 import React from "react";
 
-import { GeistSans } from "geist/font/sans";
+import { Geist } from 'next/font/google'
 import { type Metadata } from "next";
 
 import { DevtoolsProvider } from 'creatr-devtools'
+
+import { ThemeProvider } from 'next-themes';
 
 export const viewport = {
   width: "device-width",
@@ -44,14 +46,22 @@ export const metadata: Metadata = {
   },
 };
 
+const geist = Geist({
+  subsets: ['latin'],
+})
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
-      <DevtoolsProvider>
-        <body>{children}</body>
-      </DevtoolsProvider>
+    <html suppressHydrationWarning lang="en">
+      <body className={`${geist.className} bg-background text-foreground antialiased`}>
+        <ThemeProvider attribute='class'>
+          <DevtoolsProvider>
+            {children}
+          </DevtoolsProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

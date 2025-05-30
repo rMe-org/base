@@ -16,13 +16,15 @@ RUN rm -f Dockerfile
 # Install dependencies
 RUN bun install
 
-# Reset git history and initialize a fresh repository on main branch with an Initial commit
-RUN rm -rf .git && \
+
+RUN apt-get update -y && apt-get install -y git && \
+	cd /app && \
 	git init -b main && \
-	git config --global user.name "creatr-agent" && \
-	git config --global user.email "creatr-agent@getcreatr.com" && \
+	git config --system --add safe.directory /app && \
+	git config --system user.name "creatr-agent" && \
+	git config --system user.email "creatr-agent@getcreatr.com" && \
 	git add . && \
-	git commit -m "Initial commit"
+	git commit -m "Initial Commit"
 
 # Create a separate stage for exporting
 FROM alpine:latest AS export-stage
