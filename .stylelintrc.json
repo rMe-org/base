@@ -8,6 +8,7 @@
             true,
             {
                 "ignoreAtRules": [
+                    "theme",
                     "custom-variant",
                     "tailwind",
                     "apply",
@@ -38,7 +39,11 @@
         "declaration-empty-line-before": null,
         "font-family-name-quotes": null,
         "length-zero-no-unit": null,
-        "no-invalid-position-at-import-rule": null
+        "no-invalid-position-at-import-rule": null,
+        "lightness-notation": null,
+        "hue-degree-notation": null,
+        "color-function-alias-notation": null,
+        "declaration-block-no-redundant-longhand-properties": null
     },
     "overrides": [
         {
