@@ -4,6 +4,8 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "build:opennext": "opennextjs-cloudflare build",
+        "deploy:opennext": "opennextjs-cloudflare deploy -- --dispatch-namespace creatr-prod-ns",
         "build": "next build",
         "check": "next lint && tsc --noEmit",
         "dev": "next dev",
@@ -11,6 +13,7 @@
         "db:generate": "npx drizzle-kit generate && npx drizzle-kit migrate && git add . && git commit -m 'chore: update migration'"
     },
     "dependencies": {
+        "@opennextjs/cloudflare": "^1.1.0",
         "@tailwindcss/postcss": "^4.1.7",
         "@types/eslint": "^8.56.10",
         "@types/node": "^20.14.10",
@@ -56,6 +59,9 @@
         "typescript": "^5.5.3",
         "vaul": "^1.1.2",
         "zustand": "^5.0.2"
+    },
+    "devDependencies": {
+        "wrangler": "^4.18.0"
     },
     "overrides": {
         "drizzle-orm": "0.41.0-29155cc"
